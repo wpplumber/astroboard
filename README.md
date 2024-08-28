@@ -48,7 +48,7 @@ Umbraco version 9, 10, 11, 12, 13 and 14.
 `dotnet add package astroboard`
 
 ## Just like that, it’s done! 🎉
-If you've installed the Astroboard you can should restart your website (`dotnet run`) and automatically the Astroboard section should appear in the backoffice, as shown in previews above.
+If you've installed the Astroboard you should start your website (`dotnet run`) and automatically the Astroboard section should appear in the backoffice, as shown in previews above.
 
 
 ## Copyright
