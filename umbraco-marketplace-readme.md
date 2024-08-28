@@ -4,7 +4,7 @@ Astroboard is an Umbraco dashboard to get insights of your contents, assets and 
 
 ## About This Repository
 
-The purpose of this repository is to act as a central hub for reporting issues with Astroboard. This repo will **NOT** contain the Astroboard source code which is closed source.
+The purpose of this repository is to act as a central hub for reporting issues with Astroboard. This repo will **NOT** contain the AstroBoard source code which is closed source.
 
 ## Upgrade to Astroboard Pro Version
 
@@ -30,11 +30,11 @@ The purpose of this repository is to act as a central hub for reporting issues w
 
 ## Preview - Compact mode
 
-![image](public/images/astroboard-compact-mode.png)
+![image](https://github.com/wpplumber/astroboard/raw/main/public/images/astroboard-compact-mode.png)
 
 ## Preview - Full screen mode
 
-![preview](public/images/mac-astroboard-fullscreen-mode.png)
+![preview](https://github.com/wpplumber/astroboard/raw/main/public/images/mac-astroboard-fullscreen-mode.png)
 
 ## System Requirements
 Astroboard has the following requirements:
@@ -49,7 +49,6 @@ Umbraco version 9, 10, 11, 12, 13 and 14.
 
 ## Just like that, it’s done! 🎉
 If you've installed the Astroboard you can should restart your website (`dotnet run`) and automatically the Astroboard section should appear in the backoffice, as shown in previews above.
-
 
 ## Copyright
 
