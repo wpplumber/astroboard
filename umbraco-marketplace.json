@@ -22,11 +22,11 @@
       "RelatedPackages": [],
       "Screenshots": [
         {
-          "ImageUrl": "https://github.com/wpplumber/astroboard/raw/main/public/images/astroboard-compact-mode.png",
+          "ImageUrl": "https://raw.githubusercontent.com/wpplumber/astroboard/main/public/images/astroboard-compact-mode.png",
           "Caption": "Astroboard - Compact mode"
         },
                 {
-          "ImageUrl": "https://github.com/wpplumber/astroboard/raw/main/public/images/mac-astroboard-fullscreen-mode.png",
+          "ImageUrl": "https://raw.githubusercontent.com/wpplumber/astroboard/main/public/images/mac-astroboard-fullscreen-mode.png",
           "Caption": "Astroboard - Full screen mode"
         }
       ],

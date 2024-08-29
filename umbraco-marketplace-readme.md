@@ -30,11 +30,11 @@ The purpose of this repository is to act as a central hub for reporting issues w
 
 ## Preview - Compact mode
 
-![image](https://github.com/wpplumber/astroboard/raw/main/public/images/astroboard-compact-mode.png)
+![image](https://raw.githubusercontent.com/wpplumber/astroboard/main/public/images/astroboard-compact-mode.png)
 
 ## Preview - Full screen mode
 
-![preview](https://github.com/wpplumber/astroboard/raw/main/public/images/mac-astroboard-fullscreen-mode.png)
+![preview](https://raw.githubusercontent.com/wpplumber/astroboard/main/public/images/mac-astroboard-fullscreen-mode.png)
 
 ## System Requirements
 Astroboard has the following requirements:
