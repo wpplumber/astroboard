@@ -1,13 +1,18 @@
     {
       "$schema": "https://marketplace.umbraco.com/umbraco-marketplace-schema.json",
       "AddOnPackagesRequiredForUmbracoCloud": [],
-      "AlternateCategory": "",
+      "AlternateCategory": "Commerce",
       "AuthorDetails": {
         "Name": "Tarik Rital",
         "Description": "Web programmer focused on Front-end with experience in developing Umbraco websites and packages also web apps using Tailwind CSS, SPA and PWA in Vue (+ Quasar Framework, Vuetify), AstroJS. Professional aligned with agile methodology.",
-        "Url": "https://www.tarikrital.website/",
+        "Url": "https://github.com/wpplumber",
         "ImageUrl": "https://github.com/wpplumber.png",
-        "Contributors": [],
+        "Contributors": [
+         {
+        "Name": "Tarik Rital",
+        "Url": "https://github.com/wpplumber"
+        }
+          ],
         "SyncContributorsFromRepository": false
       },
       "Category": "Analytics & Insights",
