@@ -7,9 +7,9 @@
 ![NuGet Downloads](https://img.shields.io/nuget/dt/astroboard?label=NuGet%20Downloads)
 ![GitHub Issues](https://img.shields.io/github/issues/wpplumber/astroboard)
 ![Umbraco Versions](https://img.shields.io/badge/Umbraco-9%20|%2010%20|%2011%20|%2012%20|%2013%20|%2014-blue)
-![Astro.js Version](https://img.shields.io/badge/Astro.js-v4.9.2-blue)
+![Astro Version](https://img.shields.io/badge/Astro-4.9.2-blue)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.4.5-blue)
-![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-v3.4.3-blue)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3.4.3-blue)
 
 </div>
 
