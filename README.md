@@ -43,11 +43,11 @@ The purpose of this repository is to act as a central hub for reporting issues w
 
 ## Preview - Compact mode
 
-![image](public/images/astroboard-compact-mode.png)
+![astroboard compact mode](public/images/astroboard-compact-mode.png)
 
 ## Preview - Full screen mode
 
-![preview](public/images/mac-astroboard-fullscreen-mode.png)
+![astroboard fullscreen mode](public/images/mac-astroboard-fullscreen-mode.png)
 
 ## System Requirements
 Astroboard has the following requirements:
@@ -63,6 +63,8 @@ Umbraco version 9, 10, 11, 12, 13 and 14.
 ## Just like that, it’s done! 🎉
 If you've installed the Astroboard you should start your website (`dotnet run`) and automatically the Astroboard section should appear in the backoffice, as shown in previews above.
 
+## 🚨 Important: Required Settings Configuration
+![astroboard settings](public/images/astroboard-settings-screen.png)
 
 ## Copyright
 
