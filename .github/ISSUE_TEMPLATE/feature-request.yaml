@@ -1,0 +1,58 @@
+name: Feature Request
+description: File a feature request.
+title: ""
+labels: ["suggested-feature"]
+# projects: ["octo-org/1", "octo-org/44"]
+assignees:
+  - wpplumber
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to fill out this feature!
+  - type: textarea
+    id: what-feature
+    attributes:
+      label: What feature is missing?
+      description: Also tell us, what did you expect to happen?
+      placeholder: Tell us what you expect as feature!
+      value: "A feature missed!"
+    validations:
+      required: true
+  - type: dropdown
+    id: umbraco
+    attributes:
+      label: Umbraco
+      description: What version of Umbraco are you running?
+      options:
+        - 14
+        - 13
+        - 12
+        - 11
+        - 10
+        - 9
+      default: 0
+    validations:
+      required: false
+  - type: dropdown
+    id: version
+    attributes:
+      label: Version
+      description: What version of our software are you running?
+      options:
+        - 1.0.3
+        - 1.0.2
+        - 1.0.1
+      default: 0
+    validations:
+      required: false
+  - type: dropdown
+    id: browsers
+    attributes:
+      label: What browsers are you seeing the problem on?
+      multiple: false
+      options:
+        - Firefox
+        - Chrome
+        - Safari
+        - Microsoft Edge
