@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Question
+    url: https://github.com/wpplumber/astroboard/discussions
+    about: Please ask and answer questions here.
+  - name: Package Development
+    url: https://our.umbraco.com/forum/
+    about: Please use this for package development questions and ideas.

@@ -1,8 +1,7 @@
 name: Feature Request
 description: File a feature request.
-title: ""
+title: "[Feature]: "
 labels: ["suggested-feature"]
-# projects: ["octo-org/1", "octo-org/44"]
 assignees:
   - wpplumber
 body:
