@@ -40,11 +40,10 @@ Umbraco version 10, 11, 12, 13 and 14.
 If you've installed the Astroboard you should start your website (`dotnet run`) and automatically the Astroboard section should appear in the backoffice, as shown in previews above.
 
 ## 🚨 Important: Required Settings Configuration
-![astroboard settings](public/images/astroboard-settings-screen.png)
+![astroboard settings](https://raw.githubusercontent.com/wpplumber/astroboard/main/public/images/astroboard-settings-screen.png)
 
 ## Upgrade to Astroboard Pro Version
 
-<!-- prettier-ignore -->
 | Feature | Personal | Pro | Business | Enterprise |
 | --- | ------ | --- | --- | --- |
 | Sites | 1  | 3 | 10 | 25 |
