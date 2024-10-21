@@ -10,7 +10,8 @@ import vue from '@astrojs/vue';
 
 // https://astro.build/config
 export default defineConfig({
-	base: '/astroboard/',
+	site: 'https://wpplumber.github.io',
+    base: 'astroboard',
 	outDir: 'docs',
       image: {
     service: squooshImageService()
