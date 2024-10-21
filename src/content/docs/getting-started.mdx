@@ -1,0 +1,70 @@
+---
+title: Getting Started
+description: Documentation about Umbraco dashboard
+---
+
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+
+Astroboard is an [Umbraco](https://www.umbraco.com) package built to simplify your content management with comprehensive insights and seamless control. This guide has been created to help you get started with a new Umbraco project. See the [manual setup instructions](/manual-setup) to add Astroboard to an existing Umbraco website.
+
+## Quick Start
+
+### Install Umbraco Template
+
+Install the required Umbraco Template using the following command in your terminal:
+
+<Tabs syncKey="pkg">
+<TabItem label="dotnet">
+
+```sh
+dotnet new install Umbraco.Templates::13.* 
+```
+
+</TabItem>
+</Tabs>
+
+This will install the Umbraco templates necessary for your website.
+
+### Create a new project
+
+Create a new Umbraco project by running the following command in your terminal:
+
+<Tabs syncKey="pkg">
+<TabItem label="dotnet">
+
+```sh
+dotnet new umbraco --name UmbracoDashboard 
+```
+
+</TabItem>
+</Tabs>
+
+This will create an Umbraco website V13 which is the latest version using AngularJS.
+
+### Start the Umbraco server
+
+When working locally, Umbraco's development server lets you preview your work on the browser.
+
+Inside your project directory, run the following command to start the development server:
+
+<Tabs syncKey="pkg">
+<TabItem label="dotnet">
+
+```sh
+dotnet run 
+```
+
+</TabItem>
+</Tabs>
+
+This will will log a message to your terminal with the URL of your local preview, Open this URL to start browsing your site.
+
+:::tip[See it in action]
+Try Astroboard in your browser:
+[open the Umbraco backoffice](http://u13-tarik-workshop.runasp.net/umbraco).
+
+**Login**: `mail.tarik.rital@gmail.com`
+**Password**: `P@ssw0rd123`
+:::
+
+

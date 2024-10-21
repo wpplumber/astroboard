@@ -1,0 +1,128 @@
+---
+// @ts-ignore
+import TablerShieldCheckFilled from "~icons/tabler/shield-check-filled";
+import { Image } from "astro:assets";
+
+
+interface PerformanceItem {
+  image: string;
+  title: string;
+  description: string;
+}
+interface OurWorkItem {
+  image: string;
+  title: string;
+  list: string[];
+}
+
+const our_works: OurWorkItem[] = [
+  {
+    image: '/images/astroboard/total-groups-overlay.png',
+    title: 'Comprehensive Group Statistics',
+    list: ['Select specific time frames for analysis', 'Visualize group trends over time',
+     'Monitor rate of changes in groups', 'See the overall number of groups']
+  },
+  {
+    image: '/images/astroboard/total-members-overlay.png',
+    title: 'Detailed Member Statistics',
+    list: ['Customize time frame for data', 'Track member trends over time',
+     'Analyze membership growth rate', 'View the total number of members']
+  },
+  {
+    image: '/images/astroboard/total-media-overlay.png',
+    title: 'Comprehensive Asset Analytics',
+    list: ['Filter data by time frame', 'Visualize asset trends',
+     'Observe asset growth', 'See total number of assets']
+  },
+  {
+    image: '/images/astroboard/total-pages-overlay.png',
+    title: 'Page Metrics Overview',
+    list: ['Filter data by date range', 'View page trends over time',
+     'Track changes in page status', 'See total pages']
+  },
+];
+
+const performance: PerformanceItem[] = [
+  {
+    image: "/images/astroboard/activities.png",
+    title: 'Recent Activities Snapshot',
+    description: 'Stay updated with a carousel showing page statuses, names, collaborators, and last update timestamps.'
+  },
+  {
+    image: '/images/astroboard/assets-stats-last-90-days.png',
+    title: 'Comprehensive Asset Analytics',
+    description: 'Get detailed statistics on folders, files, images, SVGs, audio, and video assets'
+  },
+  {
+    image: '/images/astroboard/pages-stats.png',
+    title: 'Page Status Overview',
+    description: 'Visualize page statuses with a detailed donut chart showing Published, Draft, Unpublished, and Deleted pages.'
+  }
+];
+---
+
+  <div class="grid md:grid-cols-3 gap-x-8 md:mt-14">
+        {
+          performance.map((item: any, i: number) => (
+            <div class="text-center md:mb-0 !mt-0">
+              <div
+                class={`bg-gray-100 relative mx-auto mb-8 flex items-center justify-center rounded-xl p-2 shadow-lg ${
+                  performance.length - 1 !== i
+                    ? "after:absolute after:-right-4 after:-z-[1] after:hidden after:w-full after:translate-x-full after:border-b-2 after:border-dashed after:border-primary/50 after:content-[''] md:after:block"
+                    : undefined
+                }`}
+              >
+                <Image height={170} width={420} src={item.image} alt="" />
+              </div>
+              <h2 class="text-xl font-bold">{item.title}</h2>
+              <p class="mt-4 text-gray-500">{item.description}</p>
+            </div>
+          ))
+        }
+      </div>
+
+  </section>
+
+  <section class="md:px-10">
+    <div class="flex flex-col gap-y-20">
+      {
+        our_works.map((item: any, index: number) => (
+          <div class="md:grid md:grid-cols-12 gap-x-10 mt-16 items-center first:mt-12">
+            <div
+              class={`col-span-7 ${
+                index % 2 === 0 ? "lg:order-1" : "lg:order-0"
+              }`}
+            >
+              <div class="relative">
+                <Image
+                  class="w-full object-contain"
+                  alt="service"
+                  width={473}
+                  height={286}
+                  src={item.image}
+                />
+              </div>
+            </div>
+            <div
+              class={`mt-6 col-span-5 lg:mt-0 ${
+                index % 2 === 0 ? "lg:order-0" : "lg:order-1"
+              }`}
+            >
+              <div class="text-container">
+                <h2 class="text-2xl text-center md:text-start lg:text-4xl">{item.title}</h2>
+
+                <ul class="mt-6 text-dark lg:-ml-4">
+                  {item.list.map((list: any) => (
+                    <li class="mb-2 flex rounded px-4">
+                      <TablerShieldCheckFilled  class="my-auto mr-3 text-orange-500  w-6 h-6"/>
+                      {list}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </section>
