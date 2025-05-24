@@ -27,5 +27,22 @@
  - Resolved Launch Stability Issues: I've tackled a major app stability issue that caused crashes at load. Now, with streamlined performance, enjoy smooth, reliable access from the start.
  - Enhanced User Experience: Redesigns and removals of outdated settings make your Astroboard experience simpler and faster.
 1.1.0 Release (2025-05-24)
- - Improved LogService database compatibility by using provider-agnostic queries.
- - Enhanced User Experience: Redesigns and removals of outdated settings make your Astroboard experience simpler and faster.
+-------------------------
+
+📜 LICENSE
+- Project is now open-source under MIT License (free for use/modification).
+
+🌱 SUSTAINABILITY
+- Optimized database queries for reduced server energy consumption
+- Improved build pipeline efficiency
+
+🛠 TECHNICAL IMPROVEMENTS
+- [LogService] Upgraded to provider-agnostic queries (cross-DB compatibility)
+- [NuGet] Streamlined package dependencies
+
+🧪 TESTING
+- Added Umbraco 13 project for testing.
+
+📦 GETTING STARTED
+- Docs updated with new setup instructions
+- Visit project repo for sustainability guidelines
