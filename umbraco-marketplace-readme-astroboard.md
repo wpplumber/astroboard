@@ -1,4 +1,4 @@
-![image](public/images/compact-mode-window.png)
+![image](https://raw.githubusercontent.com/wpplumber/astroboard/main/public/images/compact-mode-window.png)
 
 <div align="center">
 
@@ -12,14 +12,6 @@
 </div>
 
 Astroboard is an Umbraco dashboard to get insights of your contents, assets and members.
-
-Here's a clean, factual sustainability table for your three projects that you can easily extend:
-
----
-
-Here's an optimized **marketplace-friendly** version of your sustainability section that avoids Markdown table rendering issues while maintaining clarity:
-
----
 
 ## ♻️ Sustainability Practices
 
@@ -42,11 +34,11 @@ Here's an optimized **marketplace-friendly** version of your sustainability sect
 
 ## Preview - Compact mode
 
-![astroboard compact mode](public/images/astroboard-compact-mode.png)
+![astroboard compact mode](https://raw.githubusercontent.com/wpplumber/astroboard/main/public/images/astroboard-compact-mode.png)
 
 ## Preview - Full screen mode
 
-![astroboard fullscreen mode](public/images/mac-astroboard-fullscreen-mode.png)
+![astroboard fullscreen mode](https://raw.githubusercontent.com/wpplumber/astroboard/main/public/images/mac-astroboard-fullscreen-mode.png)
 
 ## System Requirements
 Astroboard has the following requirements:
@@ -62,6 +54,8 @@ Umbraco version 13.
 ## Just like that, it’s done! 🎉
 If you've installed the Astroboard you should start your website (`dotnet run`) and automatically the Astroboard section should appear in the backoffice, as shown in previews above.
 
-## Copyright
+## License
 
 Copyright © 2025 [Tarik Rital](https://www.tarikrital.website/).
+
+Licensed under the [MIT License](https://github.com/wpplumber/astroboard/blob/main/LICENSE.md).
