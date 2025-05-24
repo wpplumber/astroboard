@@ -1,0 +1,47 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ContentTargetFolders>.</ContentTargetFolders>
+    <Product>astroboard</Product>
+    <PackageId>astroboard</PackageId>
+    <Title>Astroboard</Title>
+    <Description>Simplify your content management with comprehensive insights and seamless control</Description>
+    <PackageTags>analytics;umbraco;umbraco-marketplace;dashboard</PackageTags>
+    <AssemblyVersion>1.1.0</AssemblyVersion>
+    <Version>1.1.0</Version>
+    <InformationalVersion>1.1.0</InformationalVersion>
+    <Authors>Tarik Rital</Authors>
+    <PackageProjectUrl>https://github.com/wpplumber/astroboard</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/wpplumber/astroboard</RepositoryUrl>
+    <PackageIcon>astroboard-logo.png</PackageIcon>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
+    <PackageReleaseNotes>$([System.IO.File]::ReadAllText("$(MSBuildProjectDirectory)/ReleaseNotes.txt"))</PackageReleaseNotes>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
+    <UmbracoPackageSustainability>true</UmbracoPackageSustainability>
+    <EnableTrimAnalyzer>true</EnableTrimAnalyzer>
+    <PublishTrimmed>true</PublishTrimmed>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Remove="App_Plugins\astroboard\astroboard\" />
+  </ItemGroup>
+<ItemGroup>
+    <PackageReference Include="Umbraco.Cms.Web.Website" Version="13.8.1" />
+    <PackageReference Include="Umbraco.Cms.Web.BackOffice" Version="13.8.1" />
+    <None Include="astroboard-logo.png" Pack="true" PackagePath="\" />
+    <None Include="LICENSE.txt" Pack="true" PackagePath="\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_Plugins\Astroboard\**" ExcludeFromSingleFile="true" CopyToPublishDirectory="Always" />
+    <None Include="buildTransitive\**" Pack="true" PackagePath="buildTransitive" />
+    <None Include="README.md" Pack="true" PackagePath="\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App_Plugins\Astroboard\astroboard\" />
+  </ItemGroup>
+</Project>

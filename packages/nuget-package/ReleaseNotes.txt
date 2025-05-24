@@ -1,0 +1,31 @@
+1.0.0 Release (2024-08-29)
+ - Initial release.
+1.0.1 Release (2024-08-29)
+ - Fix incorrect link of Get Start your 14-Days free trial.
+1.0.2 Release (2024-08-29)
+ - Switch `umbraco-marketplace.json` from website to github repo.
+1.0.3 Release (2024-08-29)
+ - Adjust license CTA.
+1.0.4 Release (2024-09-06)
+ - Optimize UX of support.
+ - Add filtering for donut chart & table
+1.0.5 Release (2024-09-06)
+ - Fix README file headline preview bug!
+1.0.6 Release (2024-09-19)
+ - Fix Donut chart tooltip typo
+ - Add filtering for Donut and Bar charts
+ - Enhance Line charts tooltip position
+1.0.7 Release (2024-09-30)
+ - Remove draft status from Donut chart
+ - Remove draft status from Contents insights chart
+ - Enhance Line charts tooltip position
+1.0.8 Release (2024-10-18)
+ - **Onboarding Tour**: New interactive onboarding tour for first-time users, guiding you through the setup process with ease.
+ - **Performance Boost**: Refactored components for improved load times and smoother operation, enhancing overall performance.
+ - **Free 7-Day Trial**: Enjoy a risk-free 7-day trial of all premium features with no payment or signup required.
+1.0.9 Release (2024-10-26)
+ - Resolved Launch Stability Issues: I've tackled a major app stability issue that caused crashes at load. Now, with streamlined performance, enjoy smooth, reliable access from the start.
+ - Enhanced User Experience: Redesigns and removals of outdated settings make your Astroboard experience simpler and faster.
+1.1.0 Release (2025-05-24)
+ - Improved LogService database compatibility by using provider-agnostic queries.
+ - Enhanced User Experience: Redesigns and removals of outdated settings make your Astroboard experience simpler and faster.

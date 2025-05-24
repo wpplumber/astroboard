@@ -1,0 +1,14 @@
+{
+    "dashboards":  [
+        {
+            "alias": "astroboard",
+            "view":  "/App_Plugins/Astroboard/astroboard/dist/index.html",
+            "sections":  [ "content" ],
+            "weight": -1000000001,
+            "access": [
+                { "deny": "translator" },
+                { "grant": "admin" }
+            ]
+        }
+    ],
+}

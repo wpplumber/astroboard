@@ -1,0 +1,54 @@
+# Umbraco-specific
+App_Data/
+umbraco/umbraco.sqlite
+umbraco/Logs/
+umbraco/Data/TEMP
+App_Plugins/
+umbraco.config
+
+# Build artifacts
+[Bb]in/
+[Oo]bj/
+out/
+publish/
+*.nupkg
+*.snupkg
+
+# IDE & Editor
+.vs/
+.idea/
+.vscode/
+*.user
+*.suo
+*.userprefs
+
+# Dependencies (if hybrid project)
+node_modules/
+package-lock.json
+
+# Environment/configs
+.env
+.env.local
+appsettings.Local.json
+appsettings.Development.json
+
+# Debug files
+*.pdb
+*.ilk
+*.cache
+*.log
+
+# Test artifacts
+[Tt]est[Rr]esult*/
+TestResults/
+*.trx
+*.coverage
+
+# Temp files
+_ReSharper.*
+*.tmp
+~$*
+
+# OS-specific
+.DS_Store
+Thumbs.db

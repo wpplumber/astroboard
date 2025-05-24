@@ -1,0 +1,8 @@
+---
+import Dashboard from "../components/Dashboard.vue";
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout title="Astroboard - Umbraco dashboard">
+  <Dashboard client:only="vue" />
+</Layout>

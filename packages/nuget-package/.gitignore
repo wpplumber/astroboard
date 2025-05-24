@@ -1,0 +1,53 @@
+# Build outputs
+[Bb]in/
+[Oo]bj/
+out/
+dist/
+publish/
+
+# NuGet packages
+*.nupkg
+*.snupkg
+packages/
+
+# VS/Rider files
+.vs/
+.idea/
+*.user
+*.suo
+*.userprefs
+
+# Local development
+.env
+.env.local
+appsettings.Local.json
+
+# Debug files
+*.pdb
+*.ilk
+*.cache
+
+# Roslyn cache
+*.roslyn.json
+
+# Test results
+[Tt]est[Rr]esult*/
+*.trx
+
+# macOS
+.DS_Store
+
+# VS Code
+.vscode/
+!.vscode/tasks.json
+!.vscode/launch.json
+
+# Umbraco-specific
+App_Data/
+umbraco/umbraco.sdf
+umbraco/logs/
+
+# Package temp files
+/_umbraco/
+/_nuget/
+/_ReSharper.*

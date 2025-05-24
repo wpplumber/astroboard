@@ -1,0 +1,23 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <AstroboardContentFilesPath>$(MSBuildThisFileDirectory)..\App_Plugins\Astroboard\**\*.*</AstroboardContentFilesPath>
+  </PropertyGroup>
+
+  <Target Name="CopyAstroboardAssets" BeforeTargets="Build">
+    <ItemGroup>
+      <AstroboardContentFiles Include="$(AstroboardContentFilesPath)" />
+    </ItemGroup>
+    <Message Text="Copying Astroboard files: @(AstroboardContentFiles) - #@(AstroboardContentFiles->Count()) files" Importance="high" />
+    <Copy SourceFiles="@(AstroboardContentFiles)"
+          DestinationFiles="@(AstroboardContentFiles->'$(MSBuildProjectDirectory)\App_Plugins\Astroboard\%(RecursiveDir)%(Filename)%(Extension)')"
+          SkipUnchangedFiles="false" />
+  </Target>
+
+  <Target Name="ClearAstroboardAssets" BeforeTargets="Clean">
+    <ItemGroup>
+      <AstroboardDir Include="$(MSBuildProjectDirectory)\App_Plugins\Astroboard\" />
+    </ItemGroup>
+    <Message Text="Clearing old Astroboard files in: @(AstroboardDir)" Importance="high" />
+    <RemoveDir Directories="@(AstroboardDir)" />
+  </Target>
+</Project>

@@ -1,43 +1,52 @@
-    {
-      "$schema": "https://marketplace.umbraco.com/umbraco-marketplace-schema.json",
-      "AddOnPackagesRequiredForUmbracoCloud": [],
-      "AlternateCategory": "Commerce",
-      "AuthorDetails": {
-        "Name": "Tarik Rital",
-        "Description": "Web programmer focused on Front-end with experience in developing Umbraco websites and packages also web apps using Tailwind CSS, SPA and PWA in Vue (+ Quasar Framework, Vuetify), AstroJS. Professional aligned with agile methodology.",
-        "Url": "https://github.com/wpplumber",
-        "ImageUrl": "https://www.tarikrital.website/tarik.rital.avatar.png",
-        "Contributors": [
-         {
+{
+  "$schema": "https://marketplace.umbraco.com/umbraco-marketplace-schema.json",
+  "AddOnPackagesRequiredForUmbracoCloud": [],
+  "AlternateCategory": "Commerce",
+  "AuthorDetails": {
+    "Name": "Tarik Rital",
+    "Description": "Umbraco specialist crafting fast, scalable websites and packages. Focused on modern frontends (Vue, AstroJS, PWA) and eCommerce solutions with clean code and agile workflows.",
+    "Url": "https://github.com/wpplumber",
+    "ImageUrl": "https://www.tarikrital.website/tarik.rital.avatar.png",
+    "Contributors": [
+      {
         "Name": "Tarik Rital",
         "Url": "https://github.com/wpplumber"
-        }
-          ],
-        "SyncContributorsFromRepository": false
-      },
-      "Category": "Analytics & Insights",
-      "Description": "Astroboard is an Umbraco package built to simplify your content management with comprehensive insights and seamless control.",
-      "DiscussionForumUrl": "https://github.com/wpplumber/astroboard/discussions",
-      "DocumentationUrl": "https://github.com/wpplumber/astroboard",
-      "LicenseTypes": [ "Subscription" ],
-      "IssueTrackerUrl": "https://github.com/wpplumber/astroboard/issues",
-      "IsSubPackageOf": "",
-      "PackageType": "Package",
-      "PackagesByAuthor": [],
-      "RelatedPackages": [],
-      "Screenshots": [
-        {
-          "ImageUrl": "https://raw.githubusercontent.com/wpplumber/astroboard/main/public/images/astroboard-compact-mode.png",
-          "Caption": "Astroboard - Compact mode"
-        },
-                {
-          "ImageUrl": "https://raw.githubusercontent.com/wpplumber/astroboard/main/public/images/mac-astroboard-fullscreen-mode.png",
-          "Caption": "Astroboard - Full screen mode"
-        }
-      ],
-      "Tags": ['Analytics & Insights', 'Campaign & Marketing', 'Themes & Starter Kits'],
-      "Title": "Umbraco CMS with a Dynamic Dashboard",
-      "VersionDependencyMode": "SemVer",
-      "VersionSpecificPackageIds": [],
-      "VideoUrl": "https://player.vimeo.com/video/1005184954"
+      }
+    ],
+    "SyncContributorsFromRepository": false
+  },
+  "Category": "Analytics & Insights",
+  "Description": "Astroboard is an Umbraco package built to simplify your content management with comprehensive insights and seamless control.",
+  "DiscussionForumUrl": "https://github.com/wpplumber/astroboard/discussions",
+  "DocumentationUrl": "https://github.com/wpplumber/astroboard",
+  "LicenseTypes": ["Free"],
+  "IssueTrackerUrl": "https://github.com/wpplumber/astroboard/issues",
+  "IsSubPackageOf": "",
+  "PackageType": "Package",
+  "PackagesByAuthor": [],
+  "RelatedPackages": [],
+  "Screenshots": [
+    {
+      "ImageUrl": "https://raw.githubusercontent.com/wpplumber/astroboard/main/public/images/astroboard-compact-mode.png",
+      "Caption": "Astroboard - Compact mode"
+    },
+    {
+      "ImageUrl": "https://raw.githubusercontent.com/wpplumber/astroboard/main/public/images/mac-astroboard-fullscreen-mode.png",
+      "Caption": "Astroboard - Full screen mode"
     }
+  ],
+  "Tags": [
+    "Analytics & Insights",
+    "Campaign & Marketing",
+    "Themes & Starter Kits"
+  ],
+  "Title": "Umbraco CMS with a Dynamic Dashboard",
+  "VersionDependencyMode": "SemVer",
+  "VersionSpecificPackageIds": [
+    {
+      "UmbracoMajorVersion": 13,
+      "PackageId": "astroboard"
+    }
+  ],
+  "VideoUrl": "https://player.vimeo.com/video/1005184954"
+}
