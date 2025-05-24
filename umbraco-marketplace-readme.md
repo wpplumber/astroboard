@@ -19,27 +19,20 @@ Here's a clean, factual sustainability table for your three projects that you ca
 
 ## ♻️ Sustainability Practices
 
-### **1. Astro Dashboard**
-| Practice | Benefit | Implementation | Status            |
-|----------|---------|----------------|--------------|
-| 🌐 Host Routing | ~0.5s faster dev API calls | import.meta.env.DEV check |  ✅ Implemented   |
-| 🧩 Async Components | ~18-25% smaller initial load| defineAsyncComponent()  | 🚧 *WIP*   |
-| 📊 Chart Optimization | ~35% faster renders | Tree-shaken chart.js imports | 🚧 *WIP*   |
+### **Astro Dashboard**
+- **🌐 Host Routing**: `~0.5s` faster dev API calls via `import.meta.env.DEV` checks (✅ Implemented)
+- **🧩 Async Components**: `~18-25%` smaller initial loads with `defineAsyncComponent()` (🚧 *WIP*)
+- **📊 Chart Optimization**: `~35%` faster renders using tree-shaken `chart.js` (🚧 *WIP*)
 
-### **2. NuGet Package**
-| Practice | Benefit | Implementation | Status            |
-|----------|---------|----------------|--------------|
-| ✂️ Assembly Trimming | ~38% size reduction | `<PublishTrimmed>true` |  ✅ Implemented  |
-| 🗃️ Paged Queries| ~65% fewer DB hits | `GetPagedChildren()` |  ✅ Implemented   |
-| 🌐 Efficient Queries | Lower server load | LINQ/optimized SQL | ✅ Implemented |
+### **NuGet Package**
+- **✂️ Assembly Trimming**: `~38%` size reduction (`<PublishTrimmed>true`) (✅ Implemented)
+- **🗃️ Paged Queries**: `~65%` fewer DB hits via `GetPagedChildren()` (✅ Implemented)
+- **🌐 Efficient Queries**: Cross-DB compatibility with LINQ/optimized SQL (✅ Implemented)
 
-### **3. Umbraco 13 Host**
-| Practice | Benefit | Implementation | Status            |
-|----------|---------|----------------|--------------|
-| 🎯 Fixed-Port Binding | ~30% faster local testing cycles | Kestrel on :5000/:5001 | ✅ Implemented  |
-| 🌐 Development CORS| Zero config switching between standalone/embedded modes | `AllowAnyOrigin()` policy | ✅ Implemented  |
-| 🔌 HTTP/HTTPS Parallelism | Reduces TLS handshake energy during dev | Dual-port binding (`5000`+`5001`) | ✅ Implemented  |
-| 🛑 Resource Limiting | Prevents overconsumption during tests | Implicit in Kestrel defaults| ✅ Implemented  |
+### **Umbraco 13 Host**
+- **🎯 Fixed-Port Binding**: `~30%` faster local testing (Kestrel on `:5000/:5001`) (✅ Implemented)
+- **🌐 Dev CORS**: Zero-config mode switching with `AllowAnyOrigin()` (✅ Implemented)
+- **🔌 HTTP/HTTPS Parallelism**: Reduced TLS handshake energy (✅ Implemented)
 
 ---
 
