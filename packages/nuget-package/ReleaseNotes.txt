@@ -46,3 +46,19 @@
 📦 GETTING STARTED
 - Docs updated with new setup instructions
 - Visit project repo for sustainability guidelines
+
+1.1.1 Release (2025-05-28)
+-------------------------
+🛡️ Critical Security Upgrades
+
+Eliminated all High-risk vulnerabilities including:
+
+- Server source code exposure via sourcemaps (CVE-2024-XXXX)
+- Prototype pollution in SheetJS/XLSX processing
+- Path traversal in tar-fs archive extraction
+
+Patched Moderate-risk issues:
+
+- DOM clobbering in PrismJS, Astro router, and Rollup
+- CSRF middleware bypasses in Astro core
+- Development server request hijacking in Vite/esbuild
