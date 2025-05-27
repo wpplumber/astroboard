@@ -1,17 +1,15 @@
-![image](https://raw.githubusercontent.com/wpplumber/astroboard/main/public/images/compact-mode-window.png)
+# [Astroboard](https://www.astroboard.website)
 
-<div align="center">
+[Astroboard](https://www.astroboard.website/) is an open-source [Astro](https://www.astro.build/)-based
+Umbraco dashboard package. It is written in [TypeScript](https://www.typescriptlang.org) and
+uses [Vue](https://vuejs.org/).
+
+![Astroboard is an Umbraco dashboard to get insights of your contents, assets and members.](https://raw.githubusercontent.com/wpplumber/astroboard/main/public/images/compact-mode-window.png)
 
 ![NuGet Downloads](https://img.shields.io/nuget/dt/astroboard?label=NuGet%20Downloads)
 ![GitHub Issues](https://img.shields.io/github/issues/wpplumber/astroboard)
 ![Umbraco Versions](https://img.shields.io/badge/Umbraco-13-blue)
-![Astro Version](https://img.shields.io/badge/Astro-4.15.7-blue)
-![TypeScript](https://img.shields.io/badge/TypeScript-5.4.5-blue)
-![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3.4.3-blue)
-
-</div>
-
-Astroboard is an Umbraco dashboard to get insights of your contents, assets and members.
+![Astro Version](https://img.shields.io/badge/Astro-5.8.0-blue)
 
 ## ♻️ Sustainability Practices
 
@@ -32,14 +30,6 @@ Astroboard is an Umbraco dashboard to get insights of your contents, assets and 
 
 ---
 
-## Preview - Compact mode
-
-![astroboard compact mode](https://raw.githubusercontent.com/wpplumber/astroboard/main/public/images/astroboard-compact-mode.png)
-
-## Preview - Full screen mode
-
-![astroboard fullscreen mode](https://raw.githubusercontent.com/wpplumber/astroboard/main/public/images/mac-astroboard-fullscreen-mode.png)
-
 ## System Requirements
 Astroboard has the following requirements:
 Umbraco version 13.
@@ -52,7 +42,22 @@ Umbraco version 13.
 `dotnet add package astroboard`
 
 ## Just like that, it’s done! 🎉
-If you've installed the Astroboard you should start your website (`dotnet run`) and automatically the Astroboard section should appear in the backoffice, as shown in previews above.
+If you've installed the Astroboard you should start your website (`dotnet run`) and automatically the Astroboard section should appear in the backoffice, as shown in previews below.
+
+## Preview - Compact mode
+
+![image](https://raw.githubusercontent.com/wpplumber/astroboard/main/public/images/astroboard-compact-mode.png)
+
+## Preview - Full screen mode
+
+![preview](https://raw.githubusercontent.com/wpplumber/astroboard/main/public/images/mac-astroboard-fullscreen-mode.png)
+
+## Reporting Bugs and Issues
+If you think you've found a bug and you're confident it's a new bug and have confirmed that someone else is facing the same issue, go ahead and create a [new GitHub issue](https://github.com/wpplumber/astroboard/issues). Be sure to include as much information as possible so we can reproduce the bug.
+
+## Reporting Security Issues and Responsible Disclosure
+I appreciate responsible disclosure of vulnerabilities that might impact the integrity of Umbraco CMS and users.
+
 
 ## License
 

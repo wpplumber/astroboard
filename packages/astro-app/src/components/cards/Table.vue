@@ -352,7 +352,8 @@ getPaginationRowModel,
 useVueTable,
 } from "@tanstack/vue-table";
 import { computed, onMounted, ref } from "vue";
-import * as XLSX from "xlsx";
+import ExcelJS from 'exceljs';
+import { saveAs } from 'file-saver';
 import type { MembersList } from "~/utils/interfaces.ts";
 import { incrementCardsLoadedCount } from '~/stores/tourStore';
 
@@ -494,24 +495,71 @@ const fetchData = async () => {
   }
 };
 
-const exportToExcel = () => {
-  const worksheet = XLSX.utils.json_to_sheet(data.value);
-  const workbook = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(workbook, worksheet, "Umbraco Members");
-  XLSX.writeFile(workbook, "astroboard_umbraco_members.xlsx");
+const exportToExcel = async () => {
+  try {
+    // Create workbook
+    const workbook = new ExcelJS.Workbook();
+    workbook.creator = 'Umbraco Astroboard';
+    workbook.created = new Date();
+
+    // Add worksheet
+    const worksheet = workbook.addWorksheet('Members');
+
+    // Add headers
+    worksheet.columns = [
+      { header: 'Name', key: 'name', width: 25 },
+      { header: 'Email', key: 'email', width: 30 },
+      { header: 'Group', key: 'group', width: 20 },
+      { header: 'Last Login', key: 'lastLogin', width: 20 }
+    ];
+
+    // Style headers
+    worksheet.getRow(1).font = { bold: true };
+    worksheet.getRow(1).fill = {
+      type: 'pattern',
+      pattern: 'solid',
+      fgColor: { argb: 'FFD3D3D3' }
+    };
+
+    // Add data rows
+    data.value.forEach(member => {
+      worksheet.addRow({
+        name: member.name,
+        email: member.email,
+        group: member.group,
+        lastLogin: member.lastLogin
+      });
+    });
+
+    // Generate buffer and download
+    const buffer = await workbook.xlsx.writeBuffer();
+    saveAs(
+      new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' }),
+      `astroboard_members_${new Date().toISOString().slice(0,10)}.xlsx`
+    );
+  } catch (error) {
+    console.error('Error exporting to Excel:', error);
+    alert('Failed to export to Excel. Please try again.');
+  }
 };
 
 const exportToCSV = () => {
-  const worksheet = XLSX.utils.json_to_sheet(data.value);
-  const csv = XLSX.utils.sheet_to_csv(worksheet);
-  const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
-  const link = document.createElement("a");
-  const url = URL.createObjectURL(blob);
-  link.setAttribute("href", url);
-  link.setAttribute("download", "astroboard_umbraco_members.csv");
-  link.style.visibility = "hidden";
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
+  try {
+    // Create CSV content
+    const headers = ['Name', 'Email', 'Group', 'Last Login'].join(',');
+    const rows = data.value.map(item =>
+      `"${item.name?.replace(/"/g, '""')}","${item.email?.replace(/"/g, '""')}","${item.group?.replace(/"/g, '""')}","${item.lastLogin?.replace(/"/g, '""')}"`
+    ).join('\n');
+
+    // Create and download file
+    const csv = `${headers}\n${rows}`;
+    saveAs(
+      new Blob([csv], { type: 'text/csv;charset=utf-8;' }),
+      `astroboard_members_${new Date().toISOString().slice(0,10)}.csv`
+    );
+  } catch (error) {
+    console.error('Error exporting to CSV:', error);
+    alert('Failed to export to CSV. Please try again.');
+  }
 };
 </script>

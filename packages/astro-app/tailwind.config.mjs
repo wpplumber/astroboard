@@ -15,11 +15,11 @@ export default {
   },
   darkMode: "class",
   plugins: [
-    require('@tailwindcss/typography'),
-    require('@tailwindcss/forms'),
-    require("daisyui")],
+    require("@tailwindcss/typography"),
+    require("@tailwindcss/forms"),
+    require("daisyui"),
+  ],
   daisyui: {
-    // themes: ["light"],
     themes: [
       {
         light: {

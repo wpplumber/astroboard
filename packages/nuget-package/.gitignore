@@ -51,3 +51,5 @@ umbraco/logs/
 /_umbraco/
 /_nuget/
 /_ReSharper.*
+
+MyNugetAstroboard/
