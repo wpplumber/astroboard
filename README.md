@@ -11,8 +11,6 @@ uses [Vue](https://vuejs.org/).
 ![Umbraco Versions](https://img.shields.io/badge/Umbraco-13-blue)
 ![Astro Version](https://img.shields.io/badge/Astro-5.8.0-blue)
 
-Here's a clean, factual sustainability table for your three projects that you can easily extend:
-
 ---
 
 ## ♻️ Sustainability Practices
