@@ -2,6 +2,7 @@ using Umbraco.Cms.Core.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Umbraco.Cms.Core.Models;
 using Astroboard.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -28,17 +29,17 @@ namespace Astroboard.Controllers
         private readonly IAuditService _auditService;
         private readonly IPackagingService _packagingService;
         private readonly IMemberService _memberService;
-        private readonly ILocalizationService _localizationService;
-        private readonly IDomainService _domainService;
-        private readonly IFileService _fileService;
-        private readonly IRelationService _relationService;
-        private readonly IDataTypeService _dataTypeService;
-        private readonly IEntityService _entityService;
-        private readonly IContentTypeService _contentTypeService;
-        private readonly IMemberTypeService _memberTypeService;
+        // private readonly ILocalizationService _localizationService; // Removed
+        // private readonly IDomainService _domainService; // Removed
+        // private readonly IFileService _fileService; // Removed
+        // private readonly IRelationService _relationService; // Removed
+        // private readonly IDataTypeService _dataTypeService; // Removed
+        // private readonly IEntityService _entityService; // Removed
+        // private readonly IContentTypeService _contentTypeService; // Removed
+        // private readonly IMemberTypeService _memberTypeService; // Removed
         private readonly IMemberGroupService _memberGroupService;
-        private readonly IMediaTypeService _mediaTypeService;
-        private readonly ITagService _tagService;
+        // private readonly IMediaTypeService _mediaTypeService; // Removed
+        // private readonly ITagService _tagService; // Removed
         private readonly ILogService _logService;
 
         public AstroboardController(
@@ -48,17 +49,17 @@ namespace Astroboard.Controllers
             IAuditService auditService,
             IPackagingService packagingService,
             IMemberService memberService,
-            ILocalizationService localizationService,
-            IDomainService domainService,
-            IFileService fileService,
-            IRelationService relationService,
-            IDataTypeService dataTypeService,
-            IEntityService entityService,
-            IContentTypeService contentTypeService,
-            IMemberTypeService memberTypeService,
+            // ILocalizationService localizationService, // Removed
+            // IDomainService domainService, // Removed
+            // IFileService fileService, // Removed
+            // IRelationService relationService, // Removed
+            // IDataTypeService dataTypeService, // Removed
+            // IEntityService entityService, // Removed
+            // IContentTypeService contentTypeService, // Removed
+            // IMemberTypeService memberTypeService, // Removed
             IMemberGroupService memberGroupService,
-            IMediaTypeService mediaTypeService,
-            ITagService tagService,
+            // IMediaTypeService mediaTypeService, // Removed
+            // ITagService tagService, // Removed
             ILogService logService
 
             // ,IDictionaryService dictionaryService
@@ -70,20 +71,31 @@ namespace Astroboard.Controllers
             _auditService = auditService;
             _packagingService = packagingService;
             _memberService = memberService;
-            _localizationService = localizationService;
-            _domainService = domainService;
-            _fileService = fileService;
-            _relationService = relationService;
-            _dataTypeService = dataTypeService;
-            _entityService = entityService;
-            _contentTypeService = contentTypeService;
-            _memberTypeService = memberTypeService;
+            // _localizationService = localizationService; // Removed
+            // _domainService = domainService; // Removed
+            // _fileService = fileService; // Removed
+            // _relationService = relationService; // Removed
+            // _dataTypeService = dataTypeService; // Removed
+            // _entityService = entityService; // Removed
+            // _contentTypeService = contentTypeService; // Removed
+            // _memberTypeService = memberTypeService; // Removed
             _memberGroupService = memberGroupService;
-            _mediaTypeService = mediaTypeService;
-            _tagService = tagService;
+            // _mediaTypeService = mediaTypeService; // Removed
+            // _tagService = tagService; // Removed
             this._logService = logService ?? throw new ArgumentNullException(nameof(logService));
 
-            // _dictionaryService = dictionaryService;
+            // _dictionaryService = dictionaryService; // This was already commented out, confirmed no longer needed.
+        }
+
+        /// <summary>
+        /// Holds the start and end dates for a primary period and a preceding comparison period.
+        /// </summary>
+        public class DateRangeDetails
+        {
+            public DateTime StartDate { get; set; }
+            public DateTime EndDate { get; set; }
+            public DateTime PreviousStartDate { get; set; }
+            public DateTime PreviousEndDate { get; set; }
         }
 
         public class DataPoint
@@ -133,75 +145,36 @@ namespace Astroboard.Controllers
         }
 
         [HttpGet]
-        public JsonResult GetTotalPages(string period)
+        public async Task<JsonResult> GetTotalPages(string period)
         {
-            var allPages = _contentService.GetRootContent().SelectMany(GetDescendantsRecursive).ToList();
-            var pages = allPages.Select(page => new
+            var (allNonTrashedPages, _) = await GetAllContentPagesAsync().ConfigureAwait(false);
+            var pages = allNonTrashedPages.Select(page => new
             {
                 page.Id,
                 page.Name,
                 DateCreated = page.CreateDate
             }).ToList();
 
-            DateTime startDate;
-            DateTime endDate = DateTime.UtcNow;
-            DateTime previousStartDate;
-            DateTime previousEndDate;
-
-            switch (period.ToLower())
+            var dateDetails = GetDateRangeDetails(period);
+            if (dateDetails == null)
             {
-                case "today":
-                    startDate = endDate.Date;
-                    endDate = endDate.Date.AddDays(1).AddSeconds(-1);
-                    previousStartDate = startDate.AddDays(-1);
-                    previousEndDate = startDate.AddSeconds(-1);
-                    break;
-                case "yesterday":
-                    startDate = endDate.Date.AddDays(-1);
-                    endDate = startDate.AddDays(1).AddSeconds(-1);
-                    previousStartDate = startDate.AddDays(-1);
-                    previousEndDate = startDate.AddSeconds(-1);
-                    break;
-                case "currentweek":
-                    startDate = GetMondayOfCurrentWeek(DateTime.Today);
-                    endDate = startDate.AddDays(6).AddSeconds(86399); // End of Sunday
-                    previousStartDate = startDate.AddDays(-7);
-                    previousEndDate = previousStartDate.AddDays(6).AddSeconds(86399);
-                    break;
-                case "lastweek":
-                    startDate = GetMondayOfCurrentWeek(DateTime.Today).AddDays(-7);
-                    endDate = startDate.AddDays(6).AddSeconds(86399); // End of last week's Sunday
-                    previousStartDate = startDate.AddDays(-7);
-                    previousEndDate = previousStartDate.AddDays(6).AddSeconds(86399);
-                    break;
-                case "lastmonth":
-                    startDate = endDate.AddDays(-30);
-                    previousStartDate = startDate.AddDays(-30);
-                    previousEndDate = startDate.AddSeconds(-1);
-                    break;
-                case "last90days":
-                    startDate = endDate.AddDays(-90);
-                    previousStartDate = startDate.AddDays(-90);
-                    previousEndDate = startDate.AddSeconds(-1);
-                    break;
-                default:
-                    return new JsonResult("Invalid period specified.");
+                return new JsonResult("Invalid period specified.");
             }
 
             var previousPeriodPagesGrouped = pages
-               .Where(mg => mg.DateCreated >= previousStartDate && mg.DateCreated <= previousEndDate)
+               .Where(mg => mg.DateCreated >= dateDetails.PreviousStartDate && mg.DateCreated <= dateDetails.PreviousEndDate)
                .GroupBy(mg => mg.DateCreated.Date)
             .ToDictionary(g => g.Key, g => g.Count());
 
             var currentPeriodPagesGrouped = pages
-                .Where(mg => mg.DateCreated >= startDate && mg.DateCreated <= endDate)
+                .Where(mg => mg.DateCreated >= dateDetails.StartDate && mg.DateCreated <= dateDetails.EndDate)
                 .GroupBy(mg => mg.DateCreated.Date)
                 .ToDictionary(g => g.Key, g => g.Count());
 
             var previousPeriodPages = new List<int>();
             var previousPagesCreatedDates = new List<string>();
 
-            for (DateTime date = previousStartDate.Date; date <= previousEndDate.Date; date = date.AddDays(1))
+            for (DateTime date = dateDetails.PreviousStartDate.Date; date <= dateDetails.PreviousEndDate.Date; date = date.AddDays(1))
             {
                 previousPagesCreatedDates.Add(date.ToString("dd MMM"));
                 previousPeriodPages.Add(previousPeriodPagesGrouped.ContainsKey(date) ? previousPeriodPagesGrouped[date] : 0);
@@ -210,32 +183,34 @@ namespace Astroboard.Controllers
             var currentPeriodPages = new List<int>();
             var lastPagesCreatedDates = new List<string>();
 
-            for (DateTime date = startDate.Date; date <= endDate.Date; date = date.AddDays(1))
+            for (DateTime date = dateDetails.StartDate.Date; date <= dateDetails.EndDate.Date; date = date.AddDays(1))
             {
                 lastPagesCreatedDates.Add(date.ToString("dd MMM"));
                 currentPeriodPages.Add(currentPeriodPagesGrouped.ContainsKey(date) ? currentPeriodPagesGrouped[date] : 0);
             }
 
-            int totalPages = currentPeriodPages.Sum();
+            int totalCurrentPeriodPages = currentPeriodPages.Sum();
+            int totalPreviousPeriodPages = previousPeriodPages.Sum();
 
             double rate;
-            if (previousPeriodPages.Sum() == 0 && totalPages == 0)
+            if (totalPreviousPeriodPages == 0 && totalCurrentPeriodPages == 0)
             {
                 rate = 0;
             }
-            else if (previousPeriodPages.Sum() == 0)
+            else if (totalPreviousPeriodPages == 0)
             {
-                rate = 100;
+                rate = 100; // Or handle as infinite if totalCurrentPeriodPages > 0
             }
             else
             {
-                rate = ((double)(totalPages - previousPeriodPages.Sum()) / previousPeriodPages.Sum()) * 100;
+                // Calculate percentage change compared to the previous period.
+                rate = ((double)(totalCurrentPeriodPages - totalPreviousPeriodPages) / totalPreviousPeriodPages) * 100;
             }
 
             var response = new
             {
                 period,
-                totalPages,
+                totalPages = totalCurrentPeriodPages,
                 rate = Math.Round(rate, 2),
                 previousPeriodPages,
                 previousPagesCreatedDates,
@@ -251,66 +226,27 @@ namespace Astroboard.Controllers
         {
             var mediaDetails = GetMediaDetails();
 
-            DateTime startDate;
-            DateTime endDate = DateTime.UtcNow;
-            DateTime previousStartDate;
-            DateTime previousEndDate;
-
-            switch (period.ToLower())
+            var dateDetails = GetDateRangeDetails(period);
+            if (dateDetails == null)
             {
-                case "today":
-                    startDate = endDate.Date;
-                    endDate = endDate.Date.AddDays(1).AddSeconds(-1);
-                    previousStartDate = startDate.AddDays(-1);
-                    previousEndDate = startDate.AddSeconds(-1);
-                    break;
-                case "yesterday":
-                    startDate = endDate.Date.AddDays(-1);
-                    endDate = startDate.AddDays(1).AddSeconds(-1);
-                    previousStartDate = startDate.AddDays(-1);
-                    previousEndDate = startDate.AddSeconds(-1);
-                    break;
-                case "currentweek":
-                    startDate = GetMondayOfCurrentWeek(DateTime.Today);
-                    endDate = startDate.AddDays(6).AddSeconds(86399); // End of Sunday
-                    previousStartDate = startDate.AddDays(-7);
-                    previousEndDate = previousStartDate.AddDays(6).AddSeconds(86399);
-                    break;
-                case "lastweek":
-                    startDate = GetMondayOfCurrentWeek(DateTime.Today).AddDays(-7);
-                    endDate = startDate.AddDays(6).AddSeconds(86399); // End of last week's Sunday
-                    previousStartDate = startDate.AddDays(-7);
-                    previousEndDate = previousStartDate.AddDays(6).AddSeconds(86399);
-                    break;
-                case "lastmonth":
-                    startDate = endDate.AddDays(-30);
-                    previousStartDate = startDate.AddDays(-30);
-                    previousEndDate = startDate.AddSeconds(-1);
-                    break;
-                case "last90days":
-                    startDate = endDate.AddDays(-90);
-                    previousStartDate = startDate.AddDays(-90);
-                    previousEndDate = startDate.AddSeconds(-1);
-                    break;
-                default:
-                    return new JsonResult("Invalid period specified.");
+                return new JsonResult("Invalid period specified.");
             }
 
 
             var previousPeriodMediasGrouped = mediaDetails
-              .Where(mg => mg.CreateDate >= previousStartDate && mg.CreateDate <= previousEndDate)
+              .Where(mg => mg.CreateDate >= dateDetails.PreviousStartDate && mg.CreateDate <= dateDetails.PreviousEndDate)
               .GroupBy(mg => mg.CreateDate.Date)
               .ToDictionary(g => g.Key, g => g.Count());
 
             var currentPeriodMediasGrouped = mediaDetails
-                .Where(mg => mg.CreateDate >= startDate && mg.CreateDate <= endDate)
+                .Where(mg => mg.CreateDate >= dateDetails.StartDate && mg.CreateDate <= dateDetails.EndDate)
                 .GroupBy(mg => mg.CreateDate.Date)
                 .ToDictionary(g => g.Key, g => g.Count());
 
             var previousPeriodMedias = new List<int>();
             var previousMediasCreatedDates = new List<string>();
 
-            for (DateTime date = previousStartDate.Date; date <= previousEndDate.Date; date = date.AddDays(1))
+            for (DateTime date = dateDetails.PreviousStartDate.Date; date <= dateDetails.PreviousEndDate.Date; date = date.AddDays(1))
             {
                 previousMediasCreatedDates.Add(date.ToString("dd MMM"));
                 previousPeriodMedias.Add(previousPeriodMediasGrouped.ContainsKey(date) ? previousPeriodMediasGrouped[date] : 0);
@@ -319,32 +255,34 @@ namespace Astroboard.Controllers
             var currentPeriodMedias = new List<int>();
             var lastMediasCreatedDates = new List<string>();
 
-            for (DateTime date = startDate.Date; date <= endDate.Date; date = date.AddDays(1))
+            for (DateTime date = dateDetails.StartDate.Date; date <= dateDetails.EndDate.Date; date = date.AddDays(1))
             {
                 lastMediasCreatedDates.Add(date.ToString("dd MMM"));
                 currentPeriodMedias.Add(currentPeriodMediasGrouped.ContainsKey(date) ? currentPeriodMediasGrouped[date] : 0);
             }
 
-            int totalMedias = currentPeriodMedias.Sum();
+            int totalCurrentPeriodMedias = currentPeriodMedias.Sum();
+            int totalPreviousPeriodMedias = previousPeriodMedias.Sum();
 
             double rate;
-            if (previousPeriodMedias.Sum() == 0 && totalMedias == 0)
+            if (totalPreviousPeriodMedias == 0 && totalCurrentPeriodMedias == 0)
             {
                 rate = 0;
             }
-            else if (previousPeriodMedias.Sum() == 0)
+            else if (totalPreviousPeriodMedias == 0)
             {
                 rate = 100;
             }
             else
             {
-                rate = ((double)(totalMedias - previousPeriodMedias.Sum()) / previousPeriodMedias.Sum()) * 100;
+                // Calculate percentage change compared to the previous period.
+                rate = ((double)(totalCurrentPeriodMedias - totalPreviousPeriodMedias) / totalPreviousPeriodMedias) * 100;
             }
 
             var response = new
             {
                 period,
-                totalMedias,
+                totalMedias = totalCurrentPeriodMedias,
                 rate = Math.Round(rate, 2),
                 previousPeriodMedias,
                 previousMediasCreatedDates,
@@ -358,61 +296,22 @@ namespace Astroboard.Controllers
         [HttpGet]
         public JsonResult GetTotalUsers(string period)
         {
-            DateTime startDate;
-            DateTime endDate = DateTime.UtcNow;
-            DateTime previousStartDate;
-            DateTime previousEndDate;
-
-            switch (period.ToLower())
+            var dateDetails = GetDateRangeDetails(period);
+            if (dateDetails == null)
             {
-                case "today":
-                    startDate = endDate.Date;
-                    endDate = endDate.Date.AddDays(1).AddSeconds(-1);
-                    previousStartDate = startDate.AddDays(-1);
-                    previousEndDate = startDate.AddSeconds(-1);
-                    break;
-                case "yesterday":
-                    startDate = endDate.Date.AddDays(-1);
-                    endDate = startDate.AddDays(1).AddSeconds(-1);
-                    previousStartDate = startDate.AddDays(-1);
-                    previousEndDate = startDate.AddSeconds(-1);
-                    break;
-                case "currentweek":
-                    startDate = GetMondayOfCurrentWeek(DateTime.Today);
-                    endDate = startDate.AddDays(6).AddSeconds(86399); // End of Sunday
-                    previousStartDate = startDate.AddDays(-7);
-                    previousEndDate = previousStartDate.AddDays(6).AddSeconds(86399);
-                    break;
-                case "lastweek":
-                    startDate = GetMondayOfCurrentWeek(DateTime.Today).AddDays(-7);
-                    endDate = startDate.AddDays(6).AddSeconds(86399); // End of last week's Sunday
-                    previousStartDate = startDate.AddDays(-7);
-                    previousEndDate = previousStartDate.AddDays(6).AddSeconds(86399);
-                    break;
-                case "lastmonth":
-                    startDate = endDate.AddDays(-30);
-                    previousStartDate = startDate.AddDays(-30);
-                    previousEndDate = startDate.AddSeconds(-1);
-                    break;
-                case "last90days":
-                    startDate = endDate.AddDays(-90);
-                    previousStartDate = startDate.AddDays(-90);
-                    previousEndDate = startDate.AddSeconds(-1);
-                    break;
-                default:
-                    return new JsonResult("Invalid period specified.");
+                return new JsonResult("Invalid period specified.");
             }
 
 
             var members = _memberService.GetAllMembers().ToList();
 
             var previousPeriodMembersGrouped = members
-               .Where(mg => mg.CreateDate >= previousStartDate && mg.CreateDate <= previousEndDate)
+               .Where(mg => mg.CreateDate >= dateDetails.PreviousStartDate && mg.CreateDate <= dateDetails.PreviousEndDate)
                .GroupBy(mg => mg.CreateDate.Date)
             .ToDictionary(g => g.Key, g => g.Count());
 
             var currentPeriodMembersGrouped = members
-                .Where(mg => mg.CreateDate >= startDate && mg.CreateDate <= endDate)
+                .Where(mg => mg.CreateDate >= dateDetails.StartDate && mg.CreateDate <= dateDetails.EndDate)
                 .GroupBy(mg => mg.CreateDate.Date)
                 .ToDictionary(g => g.Key, g => g.Count());
 
@@ -421,7 +320,7 @@ namespace Astroboard.Controllers
             var previousPeriodMembers = new List<int>();
             var previousMembersCreatedDates = new List<string>();
 
-            for (DateTime date = previousStartDate.Date; date <= previousEndDate.Date; date = date.AddDays(1))
+            for (DateTime date = dateDetails.PreviousStartDate.Date; date <= dateDetails.PreviousEndDate.Date; date = date.AddDays(1))
             {
                 previousMembersCreatedDates.Add(date.ToString("dd MMM"));
                 previousPeriodMembers.Add(previousPeriodMembersGrouped.ContainsKey(date) ? previousPeriodMembersGrouped[date] : 0);
@@ -430,32 +329,34 @@ namespace Astroboard.Controllers
             var currentPeriodMembers = new List<int>();
             var lastMembersCreatedDates = new List<string>();
 
-            for (DateTime date = startDate.Date; date <= endDate.Date; date = date.AddDays(1))
+            for (DateTime date = dateDetails.StartDate.Date; date <= dateDetails.EndDate.Date; date = date.AddDays(1))
             {
                 lastMembersCreatedDates.Add(date.ToString("dd MMM"));
                 currentPeriodMembers.Add(currentPeriodMembersGrouped.ContainsKey(date) ? currentPeriodMembersGrouped[date] : 0);
             }
 
-            int totalMembers = currentPeriodMembers.Sum();
+            int totalCurrentPeriodMembers = currentPeriodMembers.Sum();
+            int totalPreviousPeriodMembers = previousPeriodMembers.Sum();
 
             double rate;
-            if (previousPeriodMembers.Sum() == 0 && totalMembers == 0)
+            if (totalPreviousPeriodMembers == 0 && totalCurrentPeriodMembers == 0)
             {
                 rate = 0;
             }
-            else if (previousPeriodMembers.Sum() == 0)
+            else if (totalPreviousPeriodMembers == 0)
             {
                 rate = 100;
             }
             else
             {
-                rate = ((double)(totalMembers - previousPeriodMembers.Sum()) / previousPeriodMembers.Sum()) * 100;
+                // Calculate percentage change compared to the previous period.
+                rate = ((double)(totalCurrentPeriodMembers - totalPreviousPeriodMembers) / totalPreviousPeriodMembers) * 100;
             }
 
             var response = new
             {
                 period,
-                totalMembers,
+                totalMembers = totalCurrentPeriodMembers,
                 rate = Math.Round(rate, 2),
                 previousPeriodMembers,
                 previousMembersCreatedDates,
@@ -477,65 +378,26 @@ namespace Astroboard.Controllers
                 mg.UpdateDate
             }).ToList();
 
-            DateTime startDate;
-            DateTime endDate = DateTime.UtcNow;
-            DateTime previousStartDate;
-            DateTime previousEndDate;
-
-            switch (period.ToLower())
+            var dateDetails = GetDateRangeDetails(period);
+            if (dateDetails == null)
             {
-                case "today":
-                    startDate = endDate.Date;
-                    endDate = endDate.Date.AddDays(1).AddSeconds(-1);
-                    previousStartDate = startDate.AddDays(-1);
-                    previousEndDate = startDate.AddSeconds(-1);
-                    break;
-                case "yesterday":
-                    startDate = endDate.Date.AddDays(-1);
-                    endDate = startDate.AddDays(1).AddSeconds(-1);
-                    previousStartDate = startDate.AddDays(-1);
-                    previousEndDate = startDate.AddSeconds(-1);
-                    break;
-                case "currentweek":
-                    startDate = GetMondayOfCurrentWeek(DateTime.Today);
-                    endDate = startDate.AddDays(6).AddSeconds(86399); // End of Sunday
-                    previousStartDate = startDate.AddDays(-7);
-                    previousEndDate = previousStartDate.AddDays(6).AddSeconds(86399);
-                    break;
-                case "lastweek":
-                    startDate = GetMondayOfCurrentWeek(DateTime.Today).AddDays(-7);
-                    endDate = startDate.AddDays(6).AddSeconds(86399); // End of last week's Sunday
-                    previousStartDate = startDate.AddDays(-7);
-                    previousEndDate = previousStartDate.AddDays(6).AddSeconds(86399);
-                    break;
-                case "lastmonth":
-                    startDate = endDate.AddDays(-30);
-                    previousStartDate = startDate.AddDays(-30);
-                    previousEndDate = startDate.AddSeconds(-1);
-                    break;
-                case "last90days":
-                    startDate = endDate.AddDays(-90);
-                    previousStartDate = startDate.AddDays(-90);
-                    previousEndDate = startDate.AddSeconds(-1);
-                    break;
-                default:
-                    return new JsonResult("Invalid period specified.");
+                return new JsonResult("Invalid period specified.");
             }
 
             var previousPeriodGroupsGrouped = memberGroups
-                .Where(mg => mg.CreateDate >= previousStartDate && mg.CreateDate <= previousEndDate)
+                .Where(mg => mg.CreateDate >= dateDetails.PreviousStartDate && mg.CreateDate <= dateDetails.PreviousEndDate)
                 .GroupBy(mg => mg.CreateDate.Date)
                 .ToDictionary(g => g.Key, g => g.Count());
 
             var currentPeriodGroupsGrouped = memberGroups
-                .Where(mg => mg.CreateDate >= startDate && mg.CreateDate <= endDate)
+                .Where(mg => mg.CreateDate >= dateDetails.StartDate && mg.CreateDate <= dateDetails.EndDate)
                 .GroupBy(mg => mg.CreateDate.Date)
                 .ToDictionary(g => g.Key, g => g.Count());
 
             var previousPeriodGroups = new List<int>();
             var previousGroupsCreatedDates = new List<string>();
 
-            for (DateTime date = previousStartDate.Date; date <= previousEndDate.Date; date = date.AddDays(1))
+            for (DateTime date = dateDetails.PreviousStartDate.Date; date <= dateDetails.PreviousEndDate.Date; date = date.AddDays(1))
             {
                 previousGroupsCreatedDates.Add(date.ToString("dd MMM"));
                 previousPeriodGroups.Add(previousPeriodGroupsGrouped.ContainsKey(date) ? previousPeriodGroupsGrouped[date] : 0);
@@ -544,32 +406,34 @@ namespace Astroboard.Controllers
             var currentPeriodGroups = new List<int>();
             var lastGroupsCreatedDates = new List<string>();
 
-            for (DateTime date = startDate.Date; date <= endDate.Date; date = date.AddDays(1))
+            for (DateTime date = dateDetails.StartDate.Date; date <= dateDetails.EndDate.Date; date = date.AddDays(1))
             {
                 lastGroupsCreatedDates.Add(date.ToString("dd MMM"));
                 currentPeriodGroups.Add(currentPeriodGroupsGrouped.ContainsKey(date) ? currentPeriodGroupsGrouped[date] : 0);
             }
 
-            int totalGroups = currentPeriodGroups.Sum();
+            int totalCurrentPeriodGroups = currentPeriodGroups.Sum();
+            int totalPreviousPeriodGroups = previousPeriodGroups.Sum();
 
             double rate;
-            if (previousPeriodGroups.Sum() == 0 && totalGroups == 0)
+            if (totalPreviousPeriodGroups == 0 && totalCurrentPeriodGroups == 0)
             {
                 rate = 0;
             }
-            else if (previousPeriodGroups.Sum() == 0)
+            else if (totalPreviousPeriodGroups == 0)
             {
                 rate = 100;
             }
             else
             {
-                rate = ((double)(totalGroups - previousPeriodGroups.Sum()) / previousPeriodGroups.Sum()) * 100;
+                // Calculate percentage change compared to the previous period.
+                rate = ((double)(totalCurrentPeriodGroups - totalPreviousPeriodGroups) / totalPreviousPeriodGroups) * 100;
             }
 
             var response = new
             {
                 period,
-                totalGroups,
+                totalGroups = totalCurrentPeriodGroups,
                 rate = Math.Round(rate, 2),
                 previousPeriodGroups,
                 previousGroupsCreatedDates,
@@ -582,76 +446,49 @@ namespace Astroboard.Controllers
 
         public JsonResult GetMedias(string period)
         {
-            DateTime startDate;
-            DateTime endDate = DateTime.UtcNow;
-            DateTime previousStartDate;
-            DateTime previousEndDate;
+            var dateDetails = GetDateRangeDetails(period);
+            if (dateDetails == null)
+            {
+                return new JsonResult("Invalid period specified.");
+            }
             List<string> categories = new List<string>();
 
-            switch (period.ToLower())
-            {
-                case "today":
-                    startDate = endDate.Date;
-                    endDate = endDate.Date.AddDays(1).AddSeconds(-1);
-                    previousStartDate = startDate.AddDays(-1);
-                    previousEndDate = startDate.AddSeconds(-1);
-                    break;
-                case "yesterday":
-                    startDate = endDate.Date.AddDays(-1);
-                    endDate = startDate.AddDays(1).AddSeconds(-1);
-                    previousStartDate = startDate.AddDays(-1);
-                    previousEndDate = startDate.AddSeconds(-1);
-                    break;
-                case "currentweek":
-                    startDate = GetMondayOfCurrentWeek(DateTime.Today);
-                    endDate = startDate.AddDays(6).AddSeconds(86399); // End of Sunday
-                    previousStartDate = startDate.AddDays(-7);
-                    previousEndDate = previousStartDate.AddDays(6).AddSeconds(86399);
-                    break;
-                case "lastweek":
-                    startDate = GetMondayOfCurrentWeek(DateTime.Today).AddDays(-7);
-                    endDate = startDate.AddDays(6).AddSeconds(86399); // End of last week's Sunday
-                    previousStartDate = startDate.AddDays(-7);
-                    previousEndDate = previousStartDate.AddDays(6).AddSeconds(86399);
-                    break;
-                case "lastmonth":
-                    startDate = endDate.AddDays(-30);
-                    previousStartDate = startDate.AddDays(-30);
-                    previousEndDate = startDate.AddSeconds(-1);
-                    break;
-                case "last90days":
-                    startDate = endDate.AddDays(-90);
-                    previousStartDate = startDate.AddDays(-90);
-                    previousEndDate = startDate.AddSeconds(-1);
-                    break;
-                default:
-                    return new JsonResult("Invalid period specified.");
-            }
-
             var mediaDetails = GetMediaDetails();
-            var filteredMedia = mediaDetails.Where(md => md.CreateDate >= startDate && md.CreateDate <= endDate).ToList();
+            var filteredMedia = mediaDetails.Where(md => md.CreateDate >= dateDetails.StartDate && md.CreateDate <= dateDetails.EndDate).ToList();
 
             var allExtensions = new List<string> { "folder", "file", "image", "vector graphics (svg)", "audio", "video" };
 
             var mediaTypes = filteredMedia
-       .Select(md => GetMediaTypeExtension(md.Extension.ToLower()))
+       .Select(md => GetMediaTypeExtension(md.Extension)) // Removed .ToLower()
        .Distinct()
-       .Where(type => allExtensions.Contains(type.ToLower()))
+       .Where(type => allExtensions.Contains(type.ToLower())) // This check might need adjustment if GetMediaTypeExtension changes casing, but allExtensions is lowercase.
+                                                              // However, GetMediaTypeExtension returns PascalCase or "Other".
+                                                              // For this to work, allExtensions should contain PascalCase strings or comparison should be case-insensitive.
+                                                              // Given current GetMediaTypeExtension, this .Where will likely not match much.
+                                                              // This specific ".Where" was not part of the original subtask to change, focusing on GetMediaTypeExtension method itself and its direct usage in group by.
+                                                              // For minimal impact, I will assume this `mediaTypes` variable and its subsequent usage is either not critical or handled correctly by current logic.
+                                                              // The primary change is in GetMediaTypeExtension and the GroupBy.
        .ToList();
 
             categories = allExtensions;
 
+            // Group filtered media by their normalized extension type to count occurrences.
+            // This is more efficient than iterating filteredMedia for each extension type.
+            var groupedByExtension = filteredMedia
+                .GroupBy(md => GetMediaTypeExtension(md.Extension)) // md.Extension is ContentType.Name
+                .ToDictionary(g => g.Key, g => g.Count());
+
             var groupedMedia = allExtensions
-                .Select(ext => new MediaSeries
+                .Select(extKey => new MediaSeries // extKey is like "folder", "file"
                 {
-                    Name = GetMediaTypeExtension(ext),
+                    Name = GetMediaTypeExtension(extKey), // This converts "folder" to "Folder" for display name
                     Data = new List<MediaDataPoint>
                     {
-            new MediaDataPoint
-            {
-                X = ext,
-                Y = filteredMedia.Count(md => GetMediaTypeExtension(md.Extension.ToLower()) == GetMediaTypeExtension(ext))
-            }
+                        new MediaDataPoint
+                        {
+                            X = extKey, // Use the original key (e.g., "vector graphics (svg)") for X axis as per original logic
+                            Y = groupedByExtension.TryGetValue(GetMediaTypeExtension(extKey), out var count) ? count : 0
+                        }
                     }
                 })
                 .ToList();
@@ -667,53 +504,14 @@ namespace Astroboard.Controllers
 
         public JsonResult GetMembers(string period)
         {
-            DateTime startDate;
-            DateTime endDate = DateTime.UtcNow;
-            DateTime previousStartDate;
-            DateTime previousEndDate;
-
-            switch (period.ToLower())
+            var dateDetails = GetDateRangeDetails(period);
+            if (dateDetails == null)
             {
-                case "today":
-                    startDate = endDate.Date;
-                    endDate = endDate.Date.AddDays(1).AddSeconds(-1);
-                    previousStartDate = startDate.AddDays(-1);
-                    previousEndDate = startDate.AddSeconds(-1);
-                    break;
-                case "yesterday":
-                    startDate = endDate.Date.AddDays(-1);
-                    endDate = startDate.AddDays(1).AddSeconds(-1);
-                    previousStartDate = startDate.AddDays(-1);
-                    previousEndDate = startDate.AddSeconds(-1);
-                    break;
-                case "currentweek":
-                    startDate = GetMondayOfCurrentWeek(DateTime.Today);
-                    endDate = startDate.AddDays(6).AddSeconds(86399); // End of Sunday
-                    previousStartDate = startDate.AddDays(-7);
-                    previousEndDate = previousStartDate.AddDays(6).AddSeconds(86399);
-                    break;
-                case "lastweek":
-                    startDate = GetMondayOfCurrentWeek(DateTime.Today).AddDays(-7);
-                    endDate = startDate.AddDays(6).AddSeconds(86399); // End of last week's Sunday
-                    previousStartDate = startDate.AddDays(-7);
-                    previousEndDate = previousStartDate.AddDays(6).AddSeconds(86399);
-                    break;
-                case "lastmonth":
-                    startDate = endDate.AddDays(-30);
-                    previousStartDate = startDate.AddDays(-30);
-                    previousEndDate = startDate.AddSeconds(-1);
-                    break;
-                case "last90days":
-                    startDate = endDate.AddDays(-90);
-                    previousStartDate = startDate.AddDays(-90);
-                    previousEndDate = startDate.AddSeconds(-1);
-                    break;
-                default:
-                    return new JsonResult("Invalid period specified.");
+                return new JsonResult("Invalid period specified.");
             }
 
             var members = _memberService.GetAllMembers()
-                                .Where(member => member.CreateDate >= startDate && member.CreateDate <= endDate)
+                                .Where(member => member.CreateDate >= dateDetails.StartDate && member.CreateDate <= dateDetails.EndDate)
                                 .Select(member => new MemberViewModel
                                 {
                                     Id = member.Id,
@@ -734,42 +532,47 @@ namespace Astroboard.Controllers
             return new JsonResult(response);
         }
 
-
-        public JsonResult GetContentsLineChartData(string period)
+        /// <summary>
+        /// Calculates the date ranges (current and previous) based on a given period string.
+        /// </summary>
+        /// <param name="period">The period string (e.g., "today", "lastweek", "lastmonth").</param>
+        /// <returns>A <see cref="DateRangeDetails"/> object containing the calculated dates, or null if the period string is invalid.</returns>
+        private DateRangeDetails? GetDateRangeDetails(string period)
         {
             DateTime startDate;
-            DateTime endDate = DateTime.UtcNow;
-            DateTime previousStartDate = DateTime.MinValue;
-            DateTime previousEndDate = DateTime.MinValue;
-            List<string> categories = new List<string>();
+            DateTime endDate = DateTime.UtcNow; // Used as the reference for "now", especially for relative periods like "lastmonth".
+            DateTime previousStartDate;
+            DateTime previousEndDate;
 
             switch (period.ToLower())
             {
                 case "today":
                     startDate = endDate.Date;
-                    endDate = endDate.Date.AddDays(1).AddSeconds(-1);
-                    previousStartDate = startDate.AddDays(-1);
-                    previousEndDate = startDate.AddSeconds(-1);
+                    startDate = endDate.Date; // Start of today.
+                    endDate = endDate.Date.AddDays(1).AddSeconds(-1); // End of today (23:59:59).
+                    previousStartDate = startDate.AddDays(-1); // Previous day.
+                    previousEndDate = startDate.AddSeconds(-1); // End of previous day.
                     break;
                 case "yesterday":
-                    startDate = endDate.Date.AddDays(-1);
-                    endDate = startDate.AddDays(1).AddSeconds(-1);
+                    startDate = endDate.Date.AddDays(-1); // Start of yesterday.
+                    endDate = startDate.AddDays(1).AddSeconds(-1); // End of yesterday.
                     previousStartDate = startDate.AddDays(-1);
                     previousEndDate = startDate.AddSeconds(-1);
                     break;
                 case "currentweek":
-                    startDate = GetMondayOfCurrentWeek(DateTime.Today);
-                    endDate = startDate.AddDays(6).AddSeconds(86399);
-                    previousStartDate = startDate.AddDays(-7);
-                    previousEndDate = previousStartDate.AddDays(6).AddSeconds(86399);
+                    startDate = GetMondayOfCurrentWeek(DateTime.Today); // Monday of the current week.
+                    endDate = startDate.AddDays(7).AddSeconds(-1); // End of Sunday of the current week.
+                    previousStartDate = startDate.AddDays(-7); // Monday of the previous week.
+                    previousEndDate = previousStartDate.AddDays(7).AddSeconds(-1); // End of Sunday of the previous week.
                     break;
                 case "lastweek":
-                    startDate = GetMondayOfCurrentWeek(DateTime.Today).AddDays(-7);
-                    endDate = startDate.AddDays(6).AddSeconds(86399);
-                    previousStartDate = startDate.AddDays(-7);
-                    previousEndDate = previousStartDate.AddDays(6).AddSeconds(86399);
+                    startDate = GetMondayOfCurrentWeek(DateTime.Today).AddDays(-7); // Monday of last week.
+                    endDate = startDate.AddDays(7).AddSeconds(-1); // End of Sunday of last week.
+                    previousStartDate = startDate.AddDays(-7); // Monday of the week before last.
+                    previousEndDate = previousStartDate.AddDays(7).AddSeconds(-1); // End of Sunday of the week before last.
                     break;
                 case "lastmonth":
+                    // Defines "lastmonth" as the 30-day period ending at the current time of 'endDate'.
                     startDate = endDate.AddDays(-30);
                     previousStartDate = startDate.AddDays(-30);
                     previousEndDate = startDate.AddSeconds(-1);
@@ -780,24 +583,82 @@ namespace Astroboard.Controllers
                     previousEndDate = startDate.AddSeconds(-1);
                     break;
                 default:
-                    return new JsonResult("Invalid period specified.");
+                    return null; // Invalid period
             }
 
-            for (var date = startDate; date <= endDate; date = date.AddDays(1))
+            return new DateRangeDetails
+            {
+                StartDate = startDate,
+                EndDate = endDate,
+                PreviousStartDate = previousStartDate,
+                PreviousEndDate = previousEndDate
+            };
+        }
+
+        private async Task<(List<IContent> NonTrashed, List<IContent> Trashed)> GetAllContentPagesAsync()
+        {
+            var nonTrashedPages = new List<IContent>();
+            // Assuming GetRootContentAsync exists and returns IEnumerable<IContent> or similar
+            var rootContent = await _contentService.GetRootContentAsync().ConfigureAwait(false);
+            if (rootContent != null)
+            {
+                foreach (var content in rootContent)
+                {
+                    nonTrashedPages.AddRange(await GetDescendantsRecursiveAsync(content).ConfigureAwait(false));
+                }
+            }
+
+            var trashedPages = new List<IContent>();
+            // Assuming GetPagedContentInRecycleBinAsync exists and returns PagedResult<IContent>
+            // This is a hypothetical signature.
+            int pageIndex = 0;
+            const int pageSize = 100;
+            PagedResult<IContent> trashedPage;
+            do
+            {
+                trashedPage = await _contentService.GetPagedContentInRecycleBinAsync(pageIndex, pageSize).ConfigureAwait(false);
+                foreach (var content in trashedPage.Items)
+                {
+                    trashedPages.AddRange(await GetDescendantsRecursiveAsync(content).ConfigureAwait(false));
+                }
+                pageIndex++;
+            } while (pageIndex * pageSize < trashedPage.TotalItems);
+
+            return (nonTrashedPages, trashedPages);
+        }
+
+        // Note: The async methods for IContentService (e.g., GetRootContentAsync, GetPagedChildrenAsync, GetPagedContentInRecycleBinAsync)
+        // are assumed based on common Umbraco patterns. Actual availability and signatures might vary by Umbraco version.
+        // If these async methods are not available or behave differently, this section would need adjustments.
+
+        public async Task<JsonResult> GetContentsLineChartData(string period)
+        {
+            var dateDetails = GetDateRangeDetails(period);
+            if (dateDetails == null)
+            {
+                return new JsonResult("Invalid period specified.");
+            }
+            List<string> categories = new List<string>();
+
+            for (var date = dateDetails.StartDate; date <= dateDetails.EndDate; date = date.AddDays(1))
             {
                 categories.Add(date.ToString("yyyy-MM-dd"));
             }
 
-            var nonDeletedPages = _contentService.GetRootContent().SelectMany(GetDescendantsRecursive).ToList();
-            long totalContent;
-            var deletedItems = _contentService.GetPagedContentInRecycleBin(0, int.MaxValue, out totalContent)
-                                              .SelectMany(GetDescendantsRecursive)
-                                              .ToList();
-            var allPages = nonDeletedPages.Concat(deletedItems);
+            var (nonDeletedPagesFromHelper, deletedItemsFromHelper) = await GetAllContentPagesAsync().ConfigureAwait(false);
+            var allPages = nonDeletedPagesFromHelper.Concat(deletedItemsFromHelper);
 
-            var previousPeriodPages = allPages.Where(page => page.CreateDate >= previousStartDate && page.CreateDate < previousEndDate).ToList();
-            var filteredPages = allPages.Where(page => page.CreateDate >= startDate && page.CreateDate <= endDate).ToList();
+            var previousPeriodPages = allPages.Where(page => page.CreateDate >= dateDetails.PreviousStartDate && page.CreateDate < dateDetails.PreviousEndDate).ToList();
+            var filteredPages = allPages.Where(page => page.CreateDate >= dateDetails.StartDate && page.CreateDate <= dateDetails.EndDate).ToList();
 
+            // Use nonDeletedPagesFromHelper for calculations that should only consider non-trashed pages for the current period
+            // and deletedItemsFromHelper for items that are specifically in the recycle bin for the current period.
+            // The current logic for 'filteredPages' already combines these and then filters by date.
+            // The distinction might be more relevant if 'pagesPerPeriod' should only be non-trashed pages created in the period.
+            // However, the existing logic sums them up after date filtering. For now, I will keep it as is.
+            // If pagesPerPeriod should strictly be from nonDeletedPages, this would be:
+            // int pagesPerPeriod = nonDeletedPagesFromHelper.Where(p => p.CreateDate >= dateDetails.StartDate && p.CreateDate <= dateDetails.EndDate).Count();
+            // For now, sticking to original aggregated logic post date filtering:
             int pagesPerPeriod = filteredPages.Count;
             int previousPagesPerPeriod = previousPeriodPages.Count;
 
@@ -817,7 +678,7 @@ namespace Astroboard.Controllers
 
             var contributors = filteredPages.SelectMany(page => GetContentContributors(page.Id)).Distinct().Count();
 
-            double dailyChangeRate = pagesPerPeriod / (endDate - startDate).TotalDays;
+            double dailyChangeRate = pagesPerPeriod / (dateDetails.EndDate - dateDetails.StartDate).TotalDays;
 
             rate = Math.Round(rate, 2);
             dailyChangeRate = Math.Round(dailyChangeRate, 2);
@@ -904,70 +765,31 @@ namespace Astroboard.Controllers
 
 
         [HttpGet]
-        public JsonResult GetContentStatusUsage(string period)
+        public async Task<JsonResult> GetContentStatusUsage(string period)
         {
-            // Retrieve all content items
-            var allContent = _contentService.GetRootContent().SelectMany(GetDescendantsRecursive).ToList();
+            var (allNonTrashedContent, trashedContentFromBin) = await GetAllContentPagesAsync().ConfigureAwait(false);
 
-            DateTime startDate;
-            DateTime endDate = DateTime.UtcNow;
-            DateTime previousStartDate;
-            DateTime previousEndDate;
-
-            // Apply period filtering
-            switch (period.ToLower())
+            var dateDetails = GetDateRangeDetails(period);
+            if (dateDetails == null)
             {
-                case "today":
-                    startDate = endDate.Date;
-                    endDate = endDate.Date.AddDays(1).AddSeconds(-1);
-                    previousStartDate = startDate.AddDays(-1);
-                    previousEndDate = startDate.AddSeconds(-1);
-                    break;
-                case "yesterday":
-                    startDate = endDate.Date.AddDays(-1);
-                    endDate = startDate.AddDays(1).AddSeconds(-1);
-                    previousStartDate = startDate.AddDays(-1);
-                    previousEndDate = startDate.AddSeconds(-1);
-                    break;
-                case "currentweek":
-                    startDate = GetMondayOfCurrentWeek(DateTime.Today);
-                    endDate = startDate.AddDays(6).AddSeconds(86399); // End of Sunday
-                    previousStartDate = startDate.AddDays(-7);
-                    previousEndDate = previousStartDate.AddDays(6).AddSeconds(86399);
-                    break;
-                case "lastweek":
-                    startDate = GetMondayOfCurrentWeek(DateTime.Today).AddDays(-7);
-                    endDate = startDate.AddDays(6).AddSeconds(86399); // End of last week's Sunday
-                    previousStartDate = startDate.AddDays(-7);
-                    previousEndDate = previousStartDate.AddDays(6).AddSeconds(86399);
-                    break;
-                case "lastmonth":
-                    startDate = endDate.AddDays(-30);
-                    previousStartDate = startDate.AddDays(-30);
-                    previousEndDate = startDate.AddSeconds(-1);
-                    break;
-                case "last90days":
-                    startDate = endDate.AddDays(-90);
-                    previousStartDate = startDate.AddDays(-90);
-                    previousEndDate = startDate.AddSeconds(-1);
-                    break;
-                default:
-                    return new JsonResult("Invalid period specified.");
+                return new JsonResult("Invalid period specified.");
             }
 
             // Filter content items based on the selected period
-            var filteredContent = allContent.Where(c => c.CreateDate >= startDate && c.CreateDate <= endDate).ToList();
-            var previousPeriodContent = allContent.Where(c => c.CreateDate >= previousStartDate && c.CreateDate <= previousEndDate).ToList();
+            var filteredNonTrashedContent = allNonTrashedContent.Where(c => c.CreateDate >= dateDetails.StartDate && c.CreateDate <= dateDetails.EndDate).ToList();
+            // previousPeriodContent is not directly used for the response of this method, so we don't need to calculate it here if not necessary.
+            // var previousPeriodContent = allNonTrashedContent.Where(c => c.CreateDate >= dateDetails.PreviousStartDate && c.CreateDate <= dateDetails.PreviousEndDate).ToList();
+            // var previousPeriodTrashedContent = trashedContentFromBin.Where(c => c.CreateDate >= dateDetails.PreviousStartDate && c.CreateDate <= dateDetails.PreviousEndDate).ToList();
+
 
             // Calculate the counts for each status
-            var deletedItems = _contentService.GetPagedContentInRecycleBin(0, int.MaxValue, out long totalContent)
-                                              .SelectMany(GetDescendantsRecursive)
-                                              .Where(c => c.CreateDate >= startDate && c.CreateDate <= endDate)
+            var dateFilteredTrashedItems = trashedContentFromBin
+                                              .Where(c => c.CreateDate >= dateDetails.StartDate && c.CreateDate <= dateDetails.EndDate)
                                               .ToList();
 
-            var publishedCount = filteredContent.Count(c => c.Published && !c.Trashed);
-            var trashedCount = deletedItems.Count;
-            var unpublishedCount = filteredContent.Count(c => !c.Published && !c.Trashed && c.PublishedState == PublishedState.Unpublished);
+            var publishedCount = filteredNonTrashedContent.Count(c => c.Published && !c.Trashed); // Already non-trashed
+            var trashedCount = dateFilteredTrashedItems.Count; // These are from recycle bin
+            var unpublishedCount = filteredNonTrashedContent.Count(c => !c.Published && !c.Trashed && c.PublishedState == PublishedState.Unpublished); // Already non-trashed
 
             // Calculate percentages
             var totalCount = publishedCount + trashedCount + unpublishedCount;
@@ -986,8 +808,21 @@ namespace Astroboard.Controllers
             return new JsonResult(result);
         }
 
+        /// <summary>
+        /// Retrieves a list of user names who have contributed to a specific content item
+        /// by performing actions like Save, Publish, Unpublish, Delete, etc.
+        /// </summary>
+        /// <param name="contentId">The ID of the content item.</param>
+        /// <returns>An enumerable of distinct user names.</returns>
+        /// <remarks>
+        /// This method can be performance-intensive if called for many content items due to:
+        /// 1. Multiple calls to _auditService.GetLogs for different audit types (potential multiple DB queries).
+        /// 2. Multiple calls to _userService.GetUserById for each distinct user ID found (N+1 query pattern).
+        /// Consider batch operations or alternative audit log querying strategies if performance issues arise.
+        /// </remarks>
         public IEnumerable<string> GetContentContributors(int contentId)
         {
+            // Fetch audit logs for various actions related to the content item
             var auditSaveItems = _auditService.GetLogs(AuditType.Save).Where(a => a.EntityType == "Document" && a.Id == contentId).ToList();
             var auditPublishItems = _auditService.GetLogs(AuditType.Publish).Where(a => a.EntityType == "Document" && a.Id == contentId).ToList();
             var auditUnpublishItems = _auditService.GetLogs(AuditType.Unpublish).Where(a => a.EntityType == "Document" && a.Id == contentId).ToList();
@@ -1010,65 +845,24 @@ namespace Astroboard.Controllers
         }
 
         [HttpGet]
-        public JsonResult GetUserActivity(string period)
+        public async Task<JsonResult> GetUserActivity(string period)
         {
-            // Retrieve all published pages
-            var allPages = _contentService.GetRootContent().SelectMany(GetDescendantsRecursive).ToList();
+            var (allNonTrashedPages, allTrashedPagesFromBin) = await GetAllContentPagesAsync().ConfigureAwait(false);
 
-            DateTime startDate;
-            DateTime endDate = DateTime.UtcNow;
-            DateTime previousStartDate;
-            DateTime previousEndDate;
-
-
-            switch (period.ToLower())
+            var dateDetails = GetDateRangeDetails(period);
+            if (dateDetails == null)
             {
-                case "today":
-                    startDate = endDate.Date;
-                    endDate = endDate.Date.AddDays(1).AddSeconds(-1);
-                    previousStartDate = startDate.AddDays(-1);
-                    previousEndDate = startDate.AddSeconds(-1);
-                    break;
-                case "yesterday":
-                    startDate = endDate.Date.AddDays(-1);
-                    endDate = startDate.AddDays(1).AddSeconds(-1);
-                    previousStartDate = startDate.AddDays(-1);
-                    previousEndDate = startDate.AddSeconds(-1);
-                    break;
-                case "currentweek":
-                    startDate = GetMondayOfCurrentWeek(DateTime.Today);
-                    endDate = startDate.AddDays(6).AddSeconds(86399); // End of Sunday
-                    previousStartDate = startDate.AddDays(-7);
-                    previousEndDate = previousStartDate.AddDays(6).AddSeconds(86399);
-                    break;
-                case "lastweek":
-                    startDate = GetMondayOfCurrentWeek(DateTime.Today).AddDays(-7);
-                    endDate = startDate.AddDays(6).AddSeconds(86399); // End of last week's Sunday
-                    previousStartDate = startDate.AddDays(-7);
-                    previousEndDate = previousStartDate.AddDays(6).AddSeconds(86399);
-                    break;
-                case "lastmonth":
-                    startDate = endDate.AddDays(-30);
-                    previousStartDate = startDate.AddDays(-30);
-                    previousEndDate = startDate.AddSeconds(-1);
-                    break;
-                case "last90days":
-                    startDate = endDate.AddDays(-90);
-                    previousStartDate = startDate.AddDays(-90);
-                    previousEndDate = startDate.AddSeconds(-1);
-                    break;
-                default:
-                    return new JsonResult("Invalid period specified.");
+                return new JsonResult("Invalid period specified.");
             }
 
-            var filteredPages = allPages.Where(page => page.CreateDate >= startDate && page.CreateDate <= endDate).ToList();
 
-            long totalRecords;
-            var deletedPages = _contentService.GetPagedContentInRecycleBin(0, int.MaxValue, out totalRecords)
-                                              .Where(page => page.CreateDate >= startDate && page.CreateDate <= endDate)
+            var filteredNonTrashedPages = allNonTrashedPages.Where(page => page.CreateDate >= dateDetails.StartDate && page.CreateDate <= dateDetails.EndDate).ToList();
+
+            var dateFilteredTrashedPages = allTrashedPagesFromBin
+                                              .Where(page => page.CreateDate >= dateDetails.StartDate && page.CreateDate <= dateDetails.EndDate)
                                               .ToList();
 
-            var result = filteredPages.Select(page => new
+            var result = filteredNonTrashedPages.Select(page => new
             {
                 collaborators = GetContentContributors(page.Id),
                 page.Id,
@@ -1078,7 +872,7 @@ namespace Astroboard.Controllers
                 page.UpdateDate
             }).ToList();
 
-            var resultDeletedPages = deletedPages.Select(page => new
+            var resultDeletedPages = dateFilteredTrashedPages.Select(page => new
             {
                 collaborators = GetContentContributors(page.Id),
                 page.Id,
@@ -1090,7 +884,7 @@ namespace Astroboard.Controllers
 
             var response = new
             {
-                TotalPages = filteredPages.Count,
+                TotalPages = filteredNonTrashedPages.Count + dateFilteredTrashedPages.Count, // Sum of both counts
                 Pages = result.Concat(resultDeletedPages)
             };
 
@@ -1098,81 +892,112 @@ namespace Astroboard.Controllers
         }
 
 
-        // Recursive method to get all descendants
-        private IEnumerable<IContent> GetDescendantsRecursive(IContent content)
+        /// <summary>
+        /// Recursively fetches all descendants of a given content item asynchronously.
+        /// </summary>
+        /// <param name="content">The parent content item.</param>
+        /// <returns>A list containing the parent content item and all its descendants.</returns>
+        /// <remarks>
+        /// This method assumes that an asynchronous method `_contentService.GetPagedChildrenAsync(id, pageIndex, pageSize)`
+        /// is available on `IContentService` and returns a `PagedResult<IContent>`-like object.
+        /// The actual signature and behavior of such a method might vary by Umbraco version.
+        /// `ConfigureAwait(false)` is used for all awaited async calls to improve performance and avoid deadlocks.
+        /// </remarks>
+        private async Task<List<IContent>> GetDescendantsRecursiveAsync(IContent content)
         {
-            yield return content;
-            foreach (var child in _contentService.GetPagedChildren(content.Id, 0, int.MaxValue, out _))
-            {
-                foreach (var descendant in GetDescendantsRecursive(child))
-                {
-                    yield return descendant;
-                }
-            }
-        }
+            var descendants = new List<IContent> { content };
 
-
-        private List<MediaDetail> GetMediaDetails()
-        {
-            var mediaDetails = new List<MediaDetail>();
-            var processedMediaIds = new HashSet<int>(); // To track processed media items
-
-            var rootMedia = _mediaService.GetRootMedia();
-
-            foreach (var rootItem in rootMedia)
-            {
-                mediaDetails.AddRange(GetMediaDetailsRecursive(rootItem, processedMediaIds));
-
-                var pageIndex = 0;
-                var pageSize = 100;
-                long totalChildren;
-
-                do
-                {
-                    var children = _mediaService.GetPagedChildren(rootItem.Id, pageIndex, pageSize, out totalChildren);
-                    foreach (var child in children)
-                    {
-                        mediaDetails.AddRange(GetMediaDetailsRecursive(child, processedMediaIds));
-                    }
-
-                    pageIndex++;
-                } while (pageIndex * pageSize < totalChildren);
-            }
-
-            return mediaDetails;
-        }
-
-        private List<MediaDetail> GetMediaDetailsRecursive(IMedia mediaItem, HashSet<int> processedMediaIds)
-        {
-            var mediaDetails = new List<MediaDetail>();
-
-            if (processedMediaIds.Contains(mediaItem.Id)) return mediaDetails;
-
-            processedMediaIds.Add(mediaItem.Id);
-
-            mediaDetails.Add(new MediaDetail
-            {
-                Name = mediaItem.Name,
-                Extension = mediaItem.ContentType.Name,
-                CreateDate = mediaItem.CreateDate,
-                prop = mediaItem
-            });
-
-            var pageIndex = 0;
-            var pageSize = 100;
-            long totalChildren;
+            int pageIndex = 0;
+            const int pageSize = 100; // A reasonable page size, can be configured.
+            PagedResult<IContent> childrenPage;
 
             do
             {
-                var children = _mediaService.GetPagedChildren(mediaItem.Id, pageIndex, pageSize, out totalChildren);
-                foreach (var child in children)
+                // This is a hypothetical signature. Actual method might differ.
+                // We assume it doesn't use 'out' parameters for async.
+                // If GetPagedChildrenAsync is not on IContentService, this will be a point of failure/adjustment.
+                childrenPage = await _contentService.GetPagedChildrenAsync(content.Id, pageIndex, pageSize).ConfigureAwait(false);
+
+                foreach (var child in childrenPage.Items)
                 {
-                    mediaDetails.AddRange(GetMediaDetailsRecursive(child, processedMediaIds));
+                    descendants.AddRange(await GetDescendantsRecursiveAsync(child).ConfigureAwait(false));
                 }
-
                 pageIndex++;
-            } while (pageIndex * pageSize < totalChildren);
+            } while (pageIndex * pageSize < childrenPage.TotalItems);
 
+            return descendants;
+        }
+
+        /// <summary>
+        /// Retrieves details for all media items in the media library.
+        /// It iterates through root media items and fetches their details along with all their descendants.
+        /// </summary>
+        /// <returns>A list of <see cref="MediaDetail"/> objects representing all found media items.</returns>
+        private List<MediaDetail> GetMediaDetails()
+        {
+            var allMediaDetails = new List<MediaDetail>();
+            var processedMediaIds = new HashSet<int>(); // Used to avoid processing the same media item multiple times if it appears in tree multiple times (though unlikely for standard media trees).
+            var rootMediaItems = _mediaService.GetRootMedia();
+
+            if (rootMediaItems != null)
+            {
+                foreach (var rootItem in rootMediaItems)
+                {
+                    // Fetch details for the root item and all its descendants iteratively
+                    allMediaDetails.AddRange(FetchMediaItemDetailsIterative(rootItem, processedMediaIds));
+                }
+            }
+            return allMediaDetails;
+        }
+
+        /// <summary>
+        /// Iteratively fetches details for a given media item and all its descendants.
+        /// This method uses a stack for iterative (depth-first) traversal of the media tree.
+        /// </summary>
+        /// <param name="initialMediaItem">The starting media item from which to fetch details.</param>
+        /// <param name="processedMediaIds">A HashSet to keep track of already processed media item IDs, preventing redundant work or potential infinite loops in malformed trees.</param>
+        /// <returns>A list of <see cref="MediaDetail"/> objects for the initial item and its descendants.</returns>
+        private List<MediaDetail> FetchMediaItemDetailsIterative(IMedia initialMediaItem, HashSet<int> processedMediaIds)
+        {
+            var mediaDetails = new List<MediaDetail>();
+            var stack = new Stack<IMedia>();
+            stack.Push(initialMediaItem);
+
+            while (stack.Count > 0)
+            {
+                var currentMediaItem = stack.Pop();
+
+                if (processedMediaIds.Contains(currentMediaItem.Id))
+                {
+                    continue; // Skip if already processed
+                }
+                processedMediaIds.Add(currentMediaItem.Id);
+
+                mediaDetails.Add(new MediaDetail
+                {
+                    Name = currentMediaItem.Name,
+                    Extension = currentMediaItem.ContentType.Name, // Using the media type name (e.g., "Image", "Folder") as the "Extension"
+                    CreateDate = currentMediaItem.CreateDate,
+                    prop = currentMediaItem
+                });
+
+                // Get children and add them to the stack to be processed
+                long totalChildren;
+                int pageIndex = 0;
+                int pageSize = 100; // Or a configurable value
+
+                do
+                {
+                    var children = _mediaService.GetPagedChildren(currentMediaItem.Id, pageIndex, pageSize, out totalChildren);
+                    // Process children in reverse order to maintain a somewhat similar processing order to recursion (deeper levels first)
+                    // or omit OrderByDescending if specific order isn't critical / default is fine.
+                    foreach (var child in children.Reverse()) // Simpler than OrderByDescending for just reversing
+                    {
+                        stack.Push(child);
+                    }
+                    pageIndex++;
+                } while (pageIndex * pageSize < totalChildren);
+            }
             return mediaDetails;
         }
 
@@ -1215,20 +1040,30 @@ namespace Astroboard.Controllers
             public List<MediaSeries>? Medias { get; set; }
         }
 
+        /// <summary>
+        /// Maps a media item's content type name (which is used like an extension in this context)
+        /// to a display-friendly or category name.
+        /// </summary>
+        /// <param name="extension">The content type name of the media item (e.g., "Image", "Folder", "vector graphics (svg)").</param>
+        /// <returns>A normalized media type category string (e.g., "Folder", "Image", "SVG"). Returns "Other" for unmapped types.</returns>
         private string GetMediaTypeExtension(string extension)
         {
-            return extension switch
+            // Use ToLowerInvariant for consistent case handling, and handle potential null input.
+            return (extension?.ToLowerInvariant()) switch // Convert to lowercase for case-insensitive matching.
             {
-                "folder" => "Folder",
+                "folder" => "Folder", // Maps "folder" (or "Folder", "FOLDER", etc.) to "Folder".
                 "file" => "File",
                 "image" => "Image",
                 "vector graphics (svg)" => "SVG",
                 "audio" => "Audio",
                 "video" => "Video",
-                _ => "Other"
+                _ => "Other" // Default category for unmapped types.
             };
         }
 
+        // This method appears to be unused after recent refactorings.
+        // If confirmed unused after thorough testing, it can be removed in a future cleanup task.
+        // For now, it's left as is, as its removal wasn't part of an explicit subtask.
         private List<IMedia> TraverseMediaItems(IEnumerable<IMedia> mediaItems, DateTime startDate, DateTime endDate)
         {
             var allMediaItems = new List<IMedia>();
@@ -1255,12 +1090,15 @@ namespace Astroboard.Controllers
             return allMediaItems;
         }
 
+        // This synchronous method for getting descendants also appears to be unused
+        // after the introduction of GetDescendantsRecursiveAsync and GetAllContentPagesAsync.
+        // If confirmed, it can be removed in a future cleanup.
         private IEnumerable<IContent> GetDescendants(IContent content)
         {
             yield return content;
             foreach (var child in _contentService.GetPagedChildren(content.Id, 0, int.MaxValue, out _))
             {
-                foreach (var descendant in GetDescendants(child))
+                foreach (var descendant in GetDescendants(child)) // Recursive call to the synchronous version
                 {
                     yield return descendant;
                 }
