@@ -24,29 +24,6 @@ namespace Astroboard.Services
             }
         }
 
-        public string GetActiveComputerName()
-        {
-            using (var scope = this.scopeProvider.CreateScope(autoComplete: true))
-            {
-                return scope.Database
-                    .Query<string>("SELECT computerName FROM umbracoServer WHERE isActive = 1")
-                    .FirstOrDefault();
-            }
-        }
-
-        // public string GetActiveComputerName()
-        // {
-        //     using (var scope = this.scopeProvider.CreateScope(autoComplete: true))
-        //     {
-        //         const string sql = @"SELECT computerName
-        //                              FROM umbracoServer
-        //                              WHERE isActive = 1
-        //                              LIMIT 1";
-
-        //         // Execute query and return the active computerName
-        //         return scope.Database.ExecuteScalar<string>(sql);
-        //     }
-        // }
 
     }
 }
