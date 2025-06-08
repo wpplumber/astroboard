@@ -1,14 +1,19 @@
 // @ts-check
-import { defineConfig } from "astro/config";
+import { defineConfig, passthroughImageService } from "astro/config";
 import starlight from "@astrojs/starlight";
 import Icons from "unplugin-icons/vite";
-import tailwind from "@astrojs/tailwind";
+import tailwindcss from "@tailwindcss/vite";
 
 import vue from "@astrojs/vue";
 
 export default defineConfig({
+  image: {
+    service: passthroughImageService(),
+  },
   vite: {
     plugins: [
+      tailwindcss(),
+
       Icons({
         autoInstall: true,
       }),
@@ -16,11 +21,12 @@ export default defineConfig({
   },
   integrations: [
     starlight({
+      customCss: ["./src/styles/global.css"],
       title: "Astroboard",
       logo: {
         light: "/public/images/logo.png",
         dark: "/public/images/logo.png",
-        replacesTitle: false,
+        // replacesTitle: false,
       },
       social: [
         {
@@ -39,7 +45,6 @@ export default defineConfig({
         },
       ],
     }),
-    tailwind(),
     vue(),
   ],
 });
