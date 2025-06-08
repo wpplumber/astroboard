@@ -21,7 +21,7 @@ export default defineConfig({
   },
   integrations: [
     starlight({
-      customCss: ["./src/styles/global.css"],
+      customCss: ["/src/styles/global.css"],
       title: "Astroboard",
       logo: {
         light: "/public/images/logo.png",
