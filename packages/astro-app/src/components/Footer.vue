@@ -32,7 +32,7 @@ const props = defineProps<{
         <li>|</li>
         <li>
           <a
-            href="https://tarikrital.website/store/astroboard"
+            href="https://www.astroboard.website/"
             target="_blank"
             class="tw-cursor-pointer tw-hover:tw-underline tw-text-blue-600"
             >Home</a
@@ -46,8 +46,9 @@ const props = defineProps<{
             data-tg-tour="Access and configure your license settings with ease! Click the link to open the settings dialog and update your license information as needed."
             data-test-id="license"
             class="tw-cursor-pointer tw-hover:tw-underline tw-text-blue-600"
-            href="https://astroboard.website"
-            >License</a
+            target="_blank"
+            href="https://github.com/wpplumber/astroboard?tab=MIT-1-ov-file"
+            >MIT License</a
           >
         </li>
         <li>|</li>
