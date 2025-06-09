@@ -38,7 +38,6 @@
     :computerName="computerName"
   />
   <FloatingActionButtons />
-  <Tour />
   <Alert
     :type="alertType"
     :message="alertMessage"
@@ -60,7 +59,6 @@ import LineChart from "./cards/LineChart.vue";
 import Table from "./cards/Table.vue";
 import FloatingActionButtons from "~/components/FloatingActionButtons.vue";
 import Footer from "../components/Footer.vue";
-import Tour from "../components/Tour.vue";
 
 const alertMessage = ref("Oops!");
 const alertType = ref("alert");

@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<language culture="en-US">
-<area alias="general">
-    <key alias="resetCodeExpired">The link you have clicked on is invalid or has expired</key>
-    <key alias="login">Signin</key>
-  </area>
-</language>

@@ -25,9 +25,11 @@
           </div>
           <span class="tw-font-bold">{{ activity.name }}</span>
           <div class="tw-flex tw-flex-col tw-justify-evenly tw-h-full">
-            <div v-if="index === 0"
+            <div
+              v-if="index === 0"
               data-tg-order="2"
-             data-tg-title="Meet Your Collaborators 👥" data-tg-tour="Quickly spot your team members in the carousel! Hover over each avatar to reveal their full name and get to know who’s contributing to your projects."
+              data-tg-title="Meet Your Collaborators 👥"
+              data-tg-tour="Quickly spot your team members in the carousel! Hover over each avatar to reveal their full name and get to know who’s contributing to your projects."
               class="tw-flex tw-justify-center tw--space-x-4 rtl:tw-space-x-reverse tw-mt-2"
             >
               <div
@@ -49,13 +51,14 @@
                 data-tip="remaining collaborator"
               >
                 <div
-                  class="tw-flex tw-items-center tw-justify-center tw-w-12 tw-h-12 tw-text-xs tw-font-medium tw-text-white tw-bg-gray-700 tw-border-2 tw-border-white tw-rounded-full hover:tw-bg-gray-600 dark:tw-border-gray-800  tw-mb-4"
+                  class="tw-flex tw-items-center tw-justify-center tw-w-12 tw-h-12 tw-text-xs tw-font-medium tw-text-white tw-bg-gray-700 tw-border-2 tw-border-white tw-rounded-full hover:tw-bg-gray-600 dark:tw-border-gray-800 tw-mb-4"
                 >
                   +{{ activity.collaborators.length - 5 }}
                 </div>
               </div>
             </div>
-            <div v-else
+            <div
+              v-else
               class="tw-flex tw-justify-center tw--space-x-4 rtl:tw-space-x-reverse tw-mt-2"
             >
               <div
@@ -77,14 +80,16 @@
                 data-tip="remaining collaborator"
               >
                 <div
-                  class="tw-flex tw-items-center tw-justify-center tw-w-12 tw-h-12 tw-text-xs tw-font-medium tw-text-white tw-bg-gray-700 tw-border-2 tw-border-white tw-rounded-full hover:tw-bg-gray-600 dark:tw-border-gray-800  tw-mb-4"
+                  class="tw-flex tw-items-center tw-justify-center tw-w-12 tw-h-12 tw-text-xs tw-font-medium tw-text-white tw-bg-gray-700 tw-border-2 tw-border-white tw-rounded-full hover:tw-bg-gray-600 dark:tw-border-gray-800 tw-mb-4"
                 >
                   +{{ activity.collaborators.length - 5 }}
                 </div>
               </div>
             </div>
 
-            <div class="tw-absolute tw-left-5 tw-bottom-2 tw-text-xs tw-flex tw-items-end tw-mt-1">
+            <div
+              class="tw-absolute tw-left-5 tw-bottom-2 tw-text-xs tw-flex tw-items-end tw-mt-1"
+            >
               <i-tabler-clock-edit class="tw-w-5 tw-h-5 tw-mr-1" />
               <span> {{ formatToFullTimestamp(activity.updateDate) }}</span>
             </div>
@@ -110,113 +115,116 @@
     </h3>
 
     <Menu as="div" class="tw-absolute tw-right-1 tw-top-1">
-            <div>
-              <MenuButton
-                class="tw-inline-flex tw-items-center tw-justify-center tw-text-gray-500 tw-w-8 tw-h-8 dark:tw-text-gray-400 hover:tw-bg-gray-100 dark:hover:tw-bg-gray-700 focus:tw-outline-none focus:tw-ring-4 focus:tw-ring-gray-200 dark:focus:tw-ring-gray-700 tw-rounded-lg tw-text-sm"
-              >
-                <svg
-                  class="tw-w-3.5 tw-h-3.5 tw-text-gray-800 dark:tw-text-white"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="currentColor"
-                  viewBox="0 0 16 3"
-                >
-                  <path
-                    d="M2 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm6.041 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM14 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Z"
-                  />
-                </svg>
-                <span class="tw-sr-only">Open dropdown</span>
-              </MenuButton>
-            </div>
+      <div>
+        <MenuButton
+          class="tw-inline-flex tw-items-center tw-justify-center tw-text-gray-500 tw-w-8 tw-h-8 dark:tw-text-gray-400 hover:tw-bg-gray-100 dark:hover:tw-bg-gray-700 focus:tw-outline-none focus:tw-ring-4 focus:tw-ring-gray-200 dark:focus:tw-ring-gray-700 tw-rounded-lg tw-text-sm"
+        >
+          <svg
+            class="tw-w-3.5 tw-h-3.5 tw-text-gray-800 dark:tw-text-white"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="currentColor"
+            viewBox="0 0 16 3"
+          >
+            <path
+              d="M2 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm6.041 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM14 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Z"
+            />
+          </svg>
+          <span class="tw-sr-only">Open dropdown</span>
+        </MenuButton>
+      </div>
 
-            <transition
-              enter-active-class="tw-transition tw-duration-100 tw-ease-out"
-              enter-from-class="tw-transform tw-scale-95 tw-opacity-0"
-              enter-to-class="tw-transform tw-scale-100 tw-opacity-100"
-              leave-active-class="tw-transition tw-duration-75 tw-ease-in"
-              leave-from-class="tw-transform tw-scale-100 tw-opacity-100"
-              leave-to-class="tw-transform tw-scale-95 tw-opacity-0"
-            >
-              <MenuItems
-                class="tw-z-30 tw-absolute tw-right-0 tw-w-56 tw-origin-top-right tw-divide-y tw-divide-gray-100 tw-rounded-md tw-bg-white tw-shadow-lg tw-ring-1 tw-ring-black/5 focus:tw-outline-none"
+      <transition
+        enter-active-class="tw-transition tw-duration-100 tw-ease-out"
+        enter-from-class="tw-transform tw-scale-95 tw-opacity-0"
+        enter-to-class="tw-transform tw-scale-100 tw-opacity-100"
+        leave-active-class="tw-transition tw-duration-75 tw-ease-in"
+        leave-from-class="tw-transform tw-scale-100 tw-opacity-100"
+        leave-to-class="tw-transform tw-scale-95 tw-opacity-0"
+      >
+        <MenuItems
+          class="tw-z-30 tw-absolute tw-right-0 tw-w-56 tw-origin-top-right tw-divide-y tw-divide-gray-100 tw-rounded-md tw-bg-white tw-shadow-lg tw-ring-1 tw-ring-black/5 focus:tw-outline-none"
+        >
+          <div class="tw-px-1 tw-py-1">
+            <MenuItem v-slot="{ active }">
+              <button
+                @click="selectItem('today')"
+                :class="[
+                  active ? 'tw-bg-gray-100' : '',
+                  'tw-text-gray-700 tw-group tw-flex tw-w-full tw-items-center tw-rounded-md tw-px-2 tw-py-2 tw-text-sm',
+                ]"
               >
-                <div class="tw-px-1 tw-py-1">
-                  <MenuItem v-slot="{ active }">
-                    <button
-                    @click="selectItem('today')"
-                      :class="[
-                        active ? 'tw-bg-gray-100' : '',
-                        'tw-text-gray-700 tw-group tw-flex tw-w-full tw-items-center tw-rounded-md tw-px-2 tw-py-2 tw-text-sm',
-                      ]"
-                    >
-                      Today
-                    </button>
-                  </MenuItem>
-                  <MenuItem v-slot="{ active }">
-                    <button
-                    @click="selectItem('yesterday')"
-                      :class="[
-                        active ? 'tw-bg-gray-100' : '',
-                        'tw-text-gray-700 tw-group tw-flex tw-w-full tw-items-center tw-rounded-md tw-px-2 tw-py-2 tw-text-sm',
-                      ]"
-                    >
-                      Yesterday
-                    </button>
-                  </MenuItem>
-                  <MenuItem v-slot="{ active }">
-                    <button
-                    @click="selectItem('currentweek')"
-                      :class="[
-                        active ? 'tw-bg-gray-100' : '',
-                        'tw-text-gray-700 tw-group tw-flex tw-w-full tw-items-center tw-rounded-md tw-px-2 tw-py-2 tw-text-sm',
-                      ]"
-                    >
-                      This Week
-                    </button>
-                  </MenuItem>
-                </div>
-                <div class="tw-px-1 tw-py-1">
-                  <MenuItem v-slot="{ active }">
-                    <button
-                    @click="selectItem('lastweek')"
-                      :class="[
-                        active ? 'tw-bg-gray-100' : '',
-                        'tw-text-gray-700 tw-group tw-flex tw-w-full tw-items-center tw-rounded-md tw-px-2 tw-py-2 tw-text-sm',
-                      ]"
-                    >
-                      Last 7 days
-                    </button>
-                  </MenuItem>
-                  <MenuItem v-slot="{ active }">
-                    <button
-                      @click="selectItem('lastmonth')"
-                      :class="[
-                        active ? 'tw-bg-gray-100' : '',
-                        'tw-text-gray-700 tw-group tw-flex tw-w-full tw-items-center tw-rounded-md tw-px-2 tw-py-2 tw-text-sm',
-                      ]"
-                    >
-                      Last 30 days
-                    </button>
-                  </MenuItem>
-                </div>
-                <div class="tw-px-1 tw-py-1">
-                  <MenuItem v-slot="{ active }">
-                    <button
-                    @click="selectItem('last90days')"
-                      :class="[
-                        active ? 'tw-bg-gray-100' : '',
-                        'tw-text-gray-700 tw-group tw-flex tw-w-full tw-items-center tw-rounded-md tw-px-2 tw-py-2 tw-text-sm',
-                      ]"
-                    >
-                      Last 90 days
-                    </button>
-                  </MenuItem>
-                </div>
-              </MenuItems>
-            </transition>
-          </Menu>
-    <div class="tw-absolute tw-bottom-2 tw-right-10 tw-text-[#e4e4e7] tw-font-bold tw-text-sm">{{selectedLabel}}</div>
-
+                Today
+              </button>
+            </MenuItem>
+            <MenuItem v-slot="{ active }">
+              <button
+                @click="selectItem('yesterday')"
+                :class="[
+                  active ? 'tw-bg-gray-100' : '',
+                  'tw-text-gray-700 tw-group tw-flex tw-w-full tw-items-center tw-rounded-md tw-px-2 tw-py-2 tw-text-sm',
+                ]"
+              >
+                Yesterday
+              </button>
+            </MenuItem>
+            <MenuItem v-slot="{ active }">
+              <button
+                @click="selectItem('currentweek')"
+                :class="[
+                  active ? 'tw-bg-gray-100' : '',
+                  'tw-text-gray-700 tw-group tw-flex tw-w-full tw-items-center tw-rounded-md tw-px-2 tw-py-2 tw-text-sm',
+                ]"
+              >
+                This Week
+              </button>
+            </MenuItem>
+          </div>
+          <div class="tw-px-1 tw-py-1">
+            <MenuItem v-slot="{ active }">
+              <button
+                @click="selectItem('lastweek')"
+                :class="[
+                  active ? 'tw-bg-gray-100' : '',
+                  'tw-text-gray-700 tw-group tw-flex tw-w-full tw-items-center tw-rounded-md tw-px-2 tw-py-2 tw-text-sm',
+                ]"
+              >
+                Last 7 days
+              </button>
+            </MenuItem>
+            <MenuItem v-slot="{ active }">
+              <button
+                @click="selectItem('lastmonth')"
+                :class="[
+                  active ? 'tw-bg-gray-100' : '',
+                  'tw-text-gray-700 tw-group tw-flex tw-w-full tw-items-center tw-rounded-md tw-px-2 tw-py-2 tw-text-sm',
+                ]"
+              >
+                Last 30 days
+              </button>
+            </MenuItem>
+          </div>
+          <div class="tw-px-1 tw-py-1">
+            <MenuItem v-slot="{ active }">
+              <button
+                @click="selectItem('last90days')"
+                :class="[
+                  active ? 'tw-bg-gray-100' : '',
+                  'tw-text-gray-700 tw-group tw-flex tw-w-full tw-items-center tw-rounded-md tw-px-2 tw-py-2 tw-text-sm',
+                ]"
+              >
+                Last 90 days
+              </button>
+            </MenuItem>
+          </div>
+        </MenuItems>
+      </transition>
+    </Menu>
+    <div
+      class="tw-absolute tw-bottom-2 tw-right-10 tw-text-[#e4e4e7] tw-font-bold tw-text-sm"
+    >
+      {{ selectedLabel }}
+    </div>
   </div>
 </template>
 
@@ -225,20 +233,19 @@ import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
 import { formatToFullTimestamp } from "~/utils/dateUtils";
 import { computed, onMounted, ref } from "vue";
 import type { Activity } from "~/utils/interfaces.ts";
-import { incrementCardsLoadedCount } from '~/stores/tourStore';
 
 const props = defineProps({
   currentHost: {
     type: String,
-    required: true
-  }
+    required: true,
+  },
 });
 
 const alertMessage = ref(`Enter license to unlock all features!`);
 const emit = defineEmits();
 
 function showAlert() {
-  emit('showAlert', { msg: alertMessage.value, type: 'alert' });
+  emit("showAlert", { msg: alertMessage.value, type: "alert" });
 }
 
 const loading = ref(true);
@@ -300,7 +307,6 @@ function tagClasses(tag: string) {
 
 onMounted(async () => {
   await fetchData();
-  incrementCardsLoadedCount();
 });
 
 const fetchData = async () => {

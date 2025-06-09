@@ -32,9 +32,6 @@ importers:
       '@nanostores/vue':
         specifier: ^1.0.0
         version: 1.0.0(nanostores@1.0.1)(vue@3.5.14(typescript@5.8.3))
-      '@sjmc11/tourguidejs':
-        specifier: ^0.0.27
-        version: 0.0.27
       '@tanstack/vue-table':
         specifier: ^8.21.3
         version: 8.21.3(vue@3.5.14(typescript@5.8.3))
@@ -53,18 +50,12 @@ importers:
       date-fns:
         specifier: ^4.1.0
         version: 4.1.0
-      driver.js:
-        specifier: ^1.3.6
-        version: 1.3.6
       exceljs:
         specifier: ^4.4.0
         version: 4.4.0
       file-saver:
         specifier: ^2.0.5
         version: 2.0.5
-      maska:
-        specifier: ^3.1.1
-        version: 3.1.1
       nanostores:
         specifier: ^1.0.1
         version: 1.0.1
@@ -86,9 +77,6 @@ importers:
       vue:
         specifier: ^3.5.14
         version: 3.5.14(typescript@5.8.3)
-      vuedraggable:
-        specifier: ^4.1.0
-        version: 4.1.0(vue@3.5.14(typescript@5.8.3))
     devDependencies:
       '@iconify-json/tabler':
         specifier: ^1.2.18
@@ -605,15 +593,6 @@ packages:
   '@fast-csv/parse@4.3.6':
     resolution: {integrity: sha512-uRsLYksqpbDmWaSmzvJcuApSEe38+6NQZBUsuAyMZKqHxH0g1wcJgsKUvN3WC8tewaqFjBMMGrkHmC+T7k8LvA==}
 
-  '@floating-ui/core@1.7.0':
-    resolution: {integrity: sha512-FRdBLykrPPA6P76GGGqlex/e7fbe0F1ykgxHYNXQsH/iTEtjMj/f9bpY5oQqbjt5VgZvgz/uKXbGuROijh3VLA==}
-
-  '@floating-ui/dom@1.7.0':
-    resolution: {integrity: sha512-lGTor4VlXcesUMh1cupTUTDoCxMb0V6bm3CnxHzQcw8Eaf1jQbgQX4i02fYgT0vJ82tb5MZ4CZk1LRGkktJCzg==}
-
-  '@floating-ui/utils@0.2.9':
-    resolution: {integrity: sha512-MDWhGtE+eHw5JW7lq4qhc5yRLS11ERl1c7Z6Xd0a58DozHES6EnNNwUWbMiG4J9Cgj053Bhk8zvlhFYKVhULwg==}
-
   '@headlessui/vue@1.7.23':
     resolution: {integrity: sha512-JzdCNqurrtuu0YW6QaDtR2PIYCKPUWq28csDyMvN4zmGccmE7lz40Is6hc3LA4HFeCI7sekZ/PQMTNmn9I/4Wg==}
     engines: {node: '>=10'}
@@ -1053,9 +1032,6 @@ packages:
   '@sindresorhus/merge-streams@4.0.0':
     resolution: {integrity: sha512-tlqY9xq5ukxTUZBmoOp+m61cqwQD5pHJtFY3Mn8CA8ps6yghLH/Hw8UPdqg4OLmFW3IFlcXnQNmo/dh8HzXYIQ==}
     engines: {node: '>=18'}
-
-  '@sjmc11/tourguidejs@0.0.27':
-    resolution: {integrity: sha512-SCnY9BhZbiB8N3MeU+KqJmxJrQqID3DJGMlBjZPr1+IG2OLDz8WS6K3T3AT8fLhbY3oKGEUd241R308bK3F3BA==}
 
   '@svgdotjs/svg.draggable.js@3.0.6':
     resolution: {integrity: sha512-7iJFm9lL3C40HQcqzEfezK2l+dW2CpoVY3b77KQGqc8GXWa6LhhmX5Ckv7alQfUXBuZbjpICZ+Dvq1czlGx7gA==}
@@ -1826,9 +1802,6 @@ packages:
   dotenv@16.5.0:
     resolution: {integrity: sha512-m/C+AwOAr9/W1UOIZUo232ejMNnJAJtYQjUbHoNTBNTJSvqzzDh7vnrei3o3r3m9blf6ZoDkvcw0VmozNRFJxg==}
     engines: {node: '>=12'}
-
-  driver.js@1.3.6:
-    resolution: {integrity: sha512-g2nNuu+tWmPpuoyk3ffpT9vKhjPz4NrJzq6mkRDZIwXCrFhrKdDJ9TX5tJOBpvCTBrBYjgRQ17XlcQB15q4gMg==}
 
   dset@3.1.4:
     resolution: {integrity: sha512-2QF/g9/zTaPDc3BjNcVTGoBbXBgYfMTTceLaYcFJ/W9kggFUkhxD/hMEeuLKbugyef9SqAx8cpgwlIP/jinUTA==}
@@ -2678,9 +2651,6 @@ packages:
 
   markdown-table@3.0.4:
     resolution: {integrity: sha512-wiYz4+JrLyb/DqW2hkFJxP7Vd7JuTDm77fvbM8VfEQdmSMqcImWeeRbHwZjBjIFki/VaMK2BhFi7oUUZeM5bqw==}
-
-  maska@3.1.1:
-    resolution: {integrity: sha512-68ZJfZ6/YANwv7CufbQmcCNoHdJnIRxuQgZtSFZe5ltlmZ15ZdA01siUGLh9EfaUX65DN0l/A7g+o2xjTICeGQ==}
 
   math-intrinsics@1.1.0:
     resolution: {integrity: sha512-/IXtbwEk5HTPyEwyKX6hGkYXxM9nbj64B+ilVJnC/R6B0pH5G4V3b0pVbL7DBj4tkhBAppbQUlf6F6Xl9LHu1g==}
@@ -3533,9 +3503,6 @@ packages:
     resolution: {integrity: sha512-UOPtVuYkzYGee0Bd2Szz8d2G3RfMfJ2t3qVdZUAozZyAk+a0Sxa+QKix0YCwjL/A1RR0ar44nCxaoN9FxdJGwA==}
     engines: {node: '>= 18'}
 
-  sortablejs@1.14.0:
-    resolution: {integrity: sha512-pBXvQCs5/33fdN1/39pPL0NZF20LeRbLQ5jtnheIPN9JQAaufGjKdWduZn4U7wCtVuzKhmRkI0DFYHYRbB2H1w==}
-
   source-map-js@1.2.1:
     resolution: {integrity: sha512-UXWMKhLOwVKb728IUtQPXxfYU+usdybtUrK/8uGE8CQMvrhOpwvzDBwj0QhSL7MQc7vIsISBG8VQ8+IDQxpfQA==}
     engines: {node: '>=0.10.0'}
@@ -4122,11 +4089,6 @@ packages:
     peerDependenciesMeta:
       typescript:
         optional: true
-
-  vuedraggable@4.1.0:
-    resolution: {integrity: sha512-FU5HCWBmsf20GpP3eudURW3WdWTKIbEIQxh9/8GE806hydR9qZqRRxRE3RjqX7PkuLuMQG/A7n3cfj9rCEchww==}
-    peerDependencies:
-      vue: ^3.0.1
 
   web-namespaces@2.0.1:
     resolution: {integrity: sha512-bKr1DkiNa2krS7qxNtdrtHAmzuYGFQLiQ13TsorsdT6ULTkPLKuu5+GsFpDlg6JFjUTwX2DyhMPG2be8uPrqsQ==}
@@ -4795,17 +4757,6 @@ snapshots:
       lodash.isundefined: 3.0.1
       lodash.uniq: 4.5.0
 
-  '@floating-ui/core@1.7.0':
-    dependencies:
-      '@floating-ui/utils': 0.2.9
-
-  '@floating-ui/dom@1.7.0':
-    dependencies:
-      '@floating-ui/core': 1.7.0
-      '@floating-ui/utils': 0.2.9
-
-  '@floating-ui/utils@0.2.9': {}
-
   '@headlessui/vue@1.7.23(vue@3.5.14(typescript@5.8.3))':
     dependencies:
       '@tanstack/vue-virtual': 3.13.9(vue@3.5.14(typescript@5.8.3))
@@ -5149,11 +5100,6 @@ snapshots:
   '@shikijs/vscode-textmate@10.0.2': {}
 
   '@sindresorhus/merge-streams@4.0.0': {}
-
-  '@sjmc11/tourguidejs@0.0.27':
-    dependencies:
-      '@floating-ui/dom': 1.7.0
-      sass: 1.89.0
 
   '@svgdotjs/svg.draggable.js@3.0.6(@svgdotjs/svg.js@3.2.4)':
     dependencies:
@@ -6171,8 +6117,6 @@ snapshots:
 
   dotenv@16.5.0: {}
 
-  driver.js@1.3.6: {}
-
   dset@3.1.4: {}
 
   dunder-proto@1.0.1:
@@ -6832,7 +6776,8 @@ snapshots:
 
   immediate@3.0.6: {}
 
-  immutable@5.1.2: {}
+  immutable@5.1.2:
+    optional: true
 
   import-fresh@3.3.1:
     dependencies:
@@ -7180,8 +7125,6 @@ snapshots:
       source-map-js: 1.2.1
 
   markdown-table@3.0.4: {}
-
-  maska@3.1.1: {}
 
   math-intrinsics@1.1.0: {}
 
@@ -8120,6 +8063,7 @@ snapshots:
       source-map-js: 1.2.1
     optionalDependencies:
       '@parcel/watcher': 2.5.1
+    optional: true
 
   saxes@5.0.1:
     dependencies:
@@ -8253,8 +8197,6 @@ snapshots:
       is-fullwidth-code-point: 5.0.0
 
   smol-toml@1.3.4: {}
-
-  sortablejs@1.14.0: {}
 
   source-map-js@1.2.1: {}
 
@@ -8862,11 +8804,6 @@ snapshots:
       '@vue/shared': 3.5.14
     optionalDependencies:
       typescript: 5.8.3
-
-  vuedraggable@4.1.0(vue@3.5.14(typescript@5.8.3)):
-    dependencies:
-      sortablejs: 1.14.0
-      vue: 3.5.14(typescript@5.8.3)
 
   web-namespaces@2.0.1: {}
 

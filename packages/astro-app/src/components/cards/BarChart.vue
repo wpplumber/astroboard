@@ -143,7 +143,6 @@
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
 import ApexCharts from "apexcharts";
 import { computed, onMounted, ref } from "vue";
-import { incrementCardsLoadedCount } from "~/stores/tourStore";
 
 const props = defineProps({
   currentHost: {
@@ -294,7 +293,6 @@ onMounted(async () => {
   await fetchData();
   chart.value = new ApexCharts(chartRef.value, getChartOptions.value);
   chart.value.render();
-  incrementCardsLoadedCount();
 });
 
 const fetchData = async () => {

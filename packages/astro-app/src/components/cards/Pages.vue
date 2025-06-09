@@ -4,7 +4,8 @@
   >
     <div v-if="!loading" class="tw-grid tw-grid-cols-2 tw-gap-x-1 tw-h-full">
       <div class="tw-flex tw-flex-col tw-justify-evenly">
-        <h5 id="pages-title"
+        <h5
+          id="pages-title"
           class="tw-leading-none tw-text-lg tw-font-bold tw-text-gray-900 dark:tw-text-white tw-pb-2"
         >
           {{ title }}
@@ -32,12 +33,12 @@
       </div>
       <div class="tw-relative tw-flex tw-flex-col tw-justify-end">
         <div
-        data-tg-order="1"
-         data-tg-title="Welcome to Your Dashboard! 🎉"
-            data-tg-tour="Easily navigate through your data with the filtering options available on each card! Use the dropdown in the top-right corner of every card to filter by different time periods, ensuring you view the most relevant insights."
+          data-tg-order="1"
+          data-tg-title="Welcome to Your Dashboard! 🎉"
+          data-tg-tour="Easily navigate through your data with the filtering options available on each card! Use the dropdown in the top-right corner of every card to filter by different time periods, ensuring you view the most relevant insights."
           class="tw-absolute tw-top-0 tw-right-0 tw-flex tw-justify-end tw-items-center"
         >
-          <Menu  as="div" class="tw-relative tw-inline-block tw-text-left">
+          <Menu as="div" class="tw-relative tw-inline-block tw-text-left">
             <div>
               <MenuButton
                 class="tw-inline-flex tw-items-center tw-justify-center tw-text-gray-500 tw-w-8 tw-h-8 dark:tw-text-gray-400 hover:tw-bg-gray-100 dark:hover:tw-bg-gray-700 focus:tw-outline-none focus:tw-ring-4 focus:tw-ring-gray-200 dark:focus:tw-ring-gray-700 tw-rounded-lg tw-text-sm"
@@ -71,7 +72,7 @@
                 <div class="tw-px-1 tw-py-1">
                   <MenuItem v-slot="{ active }">
                     <button
-                    @click="selectItem('today')"
+                      @click="selectItem('today')"
                       :class="[
                         active ? 'tw-bg-gray-100' : '',
                         'tw-text-gray-700 tw-group tw-flex tw-w-full tw-items-center tw-rounded-md tw-px-2 tw-py-2 tw-text-sm',
@@ -82,7 +83,7 @@
                   </MenuItem>
                   <MenuItem v-slot="{ active }">
                     <button
-                    @click="selectItem('yesterday')"
+                      @click="selectItem('yesterday')"
                       :class="[
                         active ? 'tw-bg-gray-100' : '',
                         'tw-text-gray-700 tw-group tw-flex tw-w-full tw-items-center tw-rounded-md tw-px-2 tw-py-2 tw-text-sm',
@@ -93,7 +94,7 @@
                   </MenuItem>
                   <MenuItem v-slot="{ active }">
                     <button
-                    @click="selectItem('currentweek')"
+                      @click="selectItem('currentweek')"
                       :class="[
                         active ? 'tw-bg-gray-100' : '',
                         'tw-text-gray-700 tw-group tw-flex tw-w-full tw-items-center tw-rounded-md tw-px-2 tw-py-2 tw-text-sm',
@@ -106,7 +107,7 @@
                 <div class="tw-px-1 tw-py-1">
                   <MenuItem v-slot="{ active }">
                     <button
-                    @click="selectItem('lastweek')"
+                      @click="selectItem('lastweek')"
                       :class="[
                         active ? 'tw-bg-gray-100' : '',
                         'tw-text-gray-700 tw-group tw-flex tw-w-full tw-items-center tw-rounded-md tw-px-2 tw-py-2 tw-text-sm',
@@ -130,7 +131,7 @@
                 <div class="tw-px-1 tw-py-1">
                   <MenuItem v-slot="{ active }">
                     <button
-                    @click="selectItem('last90days')"
+                      @click="selectItem('last90days')"
                       :class="[
                         active ? 'tw-bg-gray-100' : '',
                         'tw-text-gray-700 tw-group tw-flex tw-w-full tw-items-center tw-rounded-md tw-px-2 tw-py-2 tw-text-sm',
@@ -157,25 +158,23 @@
 
 <script setup lang="ts">
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
-import { useStore } from '@nanostores/vue';
+import { useStore } from "@nanostores/vue";
 import ApexCharts from "apexcharts";
 import { computed, onMounted, ref, watch, watchEffect, defineEmits } from "vue";
 import { formatValueWithK } from "~/utils/formatting";
-import { incrementCardsLoadedCount, resetTourState } from '~/stores/tourStore';
-
 
 const props = defineProps({
   currentHost: {
     type: String,
-    required: true
-  }
-})
+    required: true,
+  },
+});
 
 const alertMessage = ref(`Enter license to unlock all features!`);
 const emit = defineEmits();
 
 function showAlert() {
-  emit('showAlert', { msg: alertMessage.value, type: 'alert' });
+  emit("showAlert", { msg: alertMessage.value, type: "alert" });
 }
 
 const loading = ref(true);
@@ -224,12 +223,12 @@ const getChartOptions = ref({
     },
   },
   tooltip: {
-     fixed: {
-          enabled: true,
-          position: 'topLeft',
-          offsetX: 0,
-          offsetY: -10,
-      },
+    fixed: {
+      enabled: true,
+      position: "topLeft",
+      offsetX: 0,
+      offsetY: -10,
+    },
     enabled: true,
     x: {
       show: false,
@@ -301,9 +300,12 @@ let chart = null;
 
 watchEffect(async () => {
   getChartOptions.value.xaxis.title.text = selectedLabel.value;
-  getChartOptions.value.series[0].color = rate.value >= 0 ? "#1C64F2" : "#E02424";
-  getChartOptions.value.fill.gradient.shade = rate.value >= 0 ? "#1C64F2" : "#FBD5D5";
-  getChartOptions.value.fill.gradient.gradientToColors = rate.value >= 0 ? ["#1C64F2"] : ["#FBD5D5"];
+  getChartOptions.value.series[0].color =
+    rate.value >= 0 ? "#1C64F2" : "#E02424";
+  getChartOptions.value.fill.gradient.shade =
+    rate.value >= 0 ? "#1C64F2" : "#FBD5D5";
+  getChartOptions.value.fill.gradient.gradientToColors =
+    rate.value >= 0 ? ["#1C64F2"] : ["#FBD5D5"];
 });
 
 watch(
@@ -314,12 +316,10 @@ watch(
 );
 
 onMounted(async () => {
-  resetTourState();
   await fetchData();
   chart = new ApexCharts(chartRef.value, getChartOptions.value);
   chart.render();
-    incrementCardsLoadedCount();
-    });
+});
 
 const fetchData = async () => {
   try {
