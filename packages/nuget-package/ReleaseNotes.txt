@@ -62,3 +62,10 @@ Patched Moderate-risk issues:
 - DOM clobbering in PrismJS, Astro router, and Rollup
 - CSRF middleware bypasses in Astro core
 - Development server request hijacking in Vite/esbuild
+
+
+1.1.2 Release (2025-06-09)
+-------------------------
+✨ UX IMPROVEMENTS:
+- Removed onboarding tour for a cleaner, distraction-free dashboard experience.
+- Adjusted footer links to reduce redundancy with Umbraco’s native package UI.

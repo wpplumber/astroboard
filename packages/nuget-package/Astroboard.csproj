@@ -7,9 +7,9 @@
     <Title>Astroboard</Title>
     <Description>Simplify your content management with comprehensive insights and seamless control</Description>
     <PackageTags>analytics;umbraco;umbraco-marketplace;dashboard</PackageTags>
-    <AssemblyVersion>1.1.1</AssemblyVersion>
-    <Version>1.1.1</Version>
-    <InformationalVersion>1.1.1</InformationalVersion>
+    <AssemblyVersion>1.1.2</AssemblyVersion>
+    <Version>1.1.2</Version>
+    <InformationalVersion>1.1.2</InformationalVersion>
     <Authors>Tarik Rital</Authors>
     <PackageProjectUrl>https://www.astroboard.website</PackageProjectUrl>
     <RepositoryUrl>https://github.com/wpplumber/astroboard</RepositoryUrl>

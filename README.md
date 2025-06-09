@@ -1,7 +1,7 @@
 # [Astroboard](https://www.astroboard.website)
 
 [Astroboard](https://www.astroboard.website/) is an open-source [Astro](https://www.astro.build/)-based
-Umbraco dashboard package. It is written in [TypeScript](https://www.typescriptlang.org) and
+[Umbraco](https://www.umbraco.com) dashboard package. It is written in [TypeScript](https://www.typescriptlang.org) and
 uses [Vue](https://vuejs.org/).
 
 ![Astroboard is an Umbraco dashboard to get insights of your contents, assets and members.](https://raw.githubusercontent.com/wpplumber/astroboard/main/public/images/compact-mode-window.png)

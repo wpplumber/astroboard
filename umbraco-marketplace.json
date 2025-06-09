@@ -4,7 +4,7 @@
   "AlternateCategory": "Commerce",
   "AuthorDetails": {
     "Name": "Tarik Rital",
-    "Description": "Umbraco specialist crafting fast, scalable websites and packages. Focused on modern frontends (Vue, AstroJS, PWA) and eCommerce solutions with clean code and agile workflows.",
+    "Description": "Frontend expert | Umbraco developer",
     "Url": "https://github.com/wpplumber",
     "ImageUrl": "https://www.tarikrital.website/tarik.rital.avatar.png",
     "Contributors": [
@@ -41,7 +41,7 @@
     "Themes & Starter Kits"
   ],
   "Title": "Umbraco CMS with a Dynamic Dashboard",
-  "VersionDependencyMode": "SemVer",
+  "VersionDependencyMode": "Default",
   "VersionSpecificPackageIds": [
     {
       "UmbracoMajorVersion": 13,
