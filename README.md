@@ -19,6 +19,16 @@ uses [Vue](https://vuejs.org/).
 ✔ **Export data** (CSV/Excel) for audits and reporting.  
 ✔ **Switch between compact/full-screen** modes for flexibility.  
 
+## ✨ Key Features  
+
+| Feature | Description |  
+|---------|------------|  
+| **📈 Content Trends** | Line charts for Pages, Media, Members, and Groups with time filters (Today, Last 7 Days, etc.). |  
+| **🔄 Activity Stream** | Carousel of recent edits (published/deleted/unpublished) with contributor avatars. |  
+| **📊 Asset Breakdown** | Horizontal bar chart for media types (Images, Videos, SVG, etc.). |  
+| **👥 Member Management** | Exportable table of members (Name, Group, Last Login). | 
+| **🎨 Compact/Full-Screen** | Toggle between a tab or dedicated dashboard view. |  
+
 ## System Requirements
 Astroboard has the following requirements:
 Umbraco version 13.
