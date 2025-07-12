@@ -5,6 +5,7 @@ umbraco/Logs/
 umbraco/Data/TEMP
 App_Plugins/
 umbraco.config
+Smidge/
 
 # Build artifacts
 [Bb]in/
