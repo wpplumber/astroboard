@@ -5,11 +5,10 @@ import vue from "@astrojs/vue";
 import IconsResolver from "unplugin-icons/resolver";
 import Components from "unplugin-vue-components/vite";
 import removeConsole from "vite-plugin-remove-console";
-import react from "@astrojs/react";
 
 // https://astro.build/config
 export default defineConfig({
-  integrations: [tailwind(), vue(), react()],
+  integrations: [tailwind(), vue()],
   base:
     process.env.NODE_ENV === "development"
       ? "."

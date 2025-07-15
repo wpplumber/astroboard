@@ -1,7 +1,23 @@
 <template>
-  <div class="tw-w-full tw-bg-white tw-rounded-lg tw-relative">
+  <div
+    class="tw-w-full tw-bg-white tw-rounded-lg tw-shadow tw-relative tw-max-h-[23vh]"
+  >
+
+      <!-- Empty State (shown when no activities) -->
+        <div v-if="!loading && (!activities || activities.length === 0)" class="tw-h-full tw-w-full tw-flex tw-flex-col tw-items-center tw-justify-center tw-p-4">
+          <svg xmlns="http://www.w3.org/2000/svg" class="tw-h-16 tw-w-16 tw-text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+          </svg>
+          <h3 class="tw-text-lg tw-font-medium tw-text-gray-500 tw-mt-2">No activities found</h3>
+          <p class="tw-text-sm tw-text-gray-400 tw-text-center tw-mt-1">
+            There are no activities to display for this period.
+            <br>Try selecting a different time range.
+          </p>
+        </div>
+
+
     <div
-      v-if="!loading"
+      v-else-if="!loading"
       class="tw-carousel tw-w-full tw-h-full tw-rounded-lg tw-overflow-y-hidden"
     >
       <div
@@ -104,17 +120,70 @@
       </div>
     </div>
 
-    <div v-else class="tw-flex tw-w-full tw-flex-col tw-gap-2">
-      <div class="tw-skeleton tw-h-16 tw-w-full"></div>
-      <div class="tw-skeleton tw-h-3 tw-w-28"></div>
-      <div class="tw-skeleton tw-h-3 tw-w-full"></div>
+    <div v-else class="tw-h-full tw-w-full tw-relative">
+      <!-- Title (Top Left) -->
+      <div class="tw-absolute tw-left-3 tw-top-2">
+        <div class="tw-skeleton tw-h-6 tw-w-24 tw-bg-gray-200"></div>
+      </div>
+
+      <!-- Menu Button (Top Right) -->
+      <div class="tw-absolute tw-right-1 tw-top-1">
+        <div
+          class="tw-skeleton tw-h-8 tw-w-8 tw-rounded-btn tw-bg-gray-200"
+        ></div>
+      </div>
+
+      <!-- Content Area -->
+      <div class="tw-absolute tw-inset-0 tw-top-2 tw-px-4 tw-flex tw-flex-col">
+        <!-- Status Badge (Centered Top) -->
+        <div class="tw-flex tw-justify-center tw-mb-2">
+          <div
+            class="tw-skeleton tw-h-5 tw-w-20 tw-rounded-badge tw-bg-gray-200"
+          ></div>
+        </div>
+
+        <!-- Activity Name (Centered) -->
+        <div class="tw-flex tw-justify-center tw-my-2">
+          <div class="tw-skeleton tw-h-6 tw-w-3/4 tw-bg-gray-200"></div>
+        </div>
+
+        <!-- Collaborators Avatars (Centered) -->
+        <div class="tw-flex tw-justify-center tw-my-4 tw--space-x-4">
+          <div
+            v-for="i in 5"
+            :key="i"
+            class="tw-skeleton tw-h-12 tw-w-12 tw-rounded-full tw-bg-gray-200"
+          ></div>
+          <div
+            class="tw-skeleton tw-h-12 tw-w-12 tw-rounded-full tw-bg-gray-200"
+          ></div>
+        </div>
+
+        <!-- Bottom Timestamp (Left) -->
+        <div class="tw-flex tw-items-center tw-gap-2">
+          <div
+            class="tw-skeleton tw-h-5 tw-w-5 tw-rounded-full tw-bg-gray-200"
+          ></div>
+          <div class="tw-skeleton tw-h-4 tw-w-32 tw-bg-gray-200"></div>
+        </div
+
+        <!-- Period Label (Bottom Right) -->
+        <div class="tw-absolute tw-right-3 tw-bottom-1">
+          <div
+            class="tw-skeleton tw-h-5 tw-w-24 tw-rounded-badge tw-bg-gray-200"
+          ></div>
+        </div>
+      </div>
     </div>
 
-    <h3 class="tw-font-bold tw-text-lg tw-absolute tw-left-3 tw-top-2">
+    <h3
+      v-if="!loading"
+      class="tw-font-bold tw-text-lg tw-absolute tw-left-3 tw-top-2"
+    >
       Activities
     </h3>
 
-    <Menu as="div" class="tw-absolute tw-right-1 tw-top-1">
+    <Menu v-if="!loading" as="div" class="tw-absolute tw-right-1 tw-top-1">
       <div>
         <MenuButton
           class="tw-inline-flex tw-items-center tw-justify-center tw-text-gray-500 tw-w-8 tw-h-8 dark:tw-text-gray-400 hover:tw-bg-gray-100 dark:hover:tw-bg-gray-700 focus:tw-outline-none focus:tw-ring-4 focus:tw-ring-gray-200 dark:focus:tw-ring-gray-700 tw-rounded-lg tw-text-sm"
@@ -220,7 +289,9 @@
         </MenuItems>
       </transition>
     </Menu>
+
     <div
+      v-if="!loading"
       class="tw-absolute tw-bottom-2 tw-right-10 tw-text-[#e4e4e7] tw-font-bold tw-text-sm"
     >
       {{ selectedLabel }}
@@ -231,13 +302,17 @@
 <script setup lang="ts">
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
 import { formatToFullTimestamp } from "~/utils/dateUtils";
-import { computed, onMounted, ref } from "vue";
+import { computed, onMounted, ref, watch } from "vue";
 import type { Activity } from "~/utils/interfaces.ts";
 
 const props = defineProps({
   currentHost: {
     type: String,
     required: true,
+  },
+  globalFilter: {
+    type: String,
+    default: null,
   },
 });
 
@@ -311,6 +386,7 @@ onMounted(async () => {
 
 const fetchData = async () => {
   try {
+
     const API_PREFIX = import.meta.env.PUBLIC_API_PREFIX;
 
     const response = await fetch(
@@ -329,6 +405,16 @@ const fetchData = async () => {
 const formattedUpdateDate = (dateActivity: string) => {
   return formatToFullTimestamp(new Date(dateActivity), "PPpp");
 };
+
+watch(
+  () => props.globalFilter,
+  async (newFilter) => {
+    if (newFilter) {
+      selectedItem.value = newFilter;
+      await fetchData();
+    }
+  },
+);
 </script>
 
 <style scoped>
