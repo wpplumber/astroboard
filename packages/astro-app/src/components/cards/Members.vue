@@ -2,178 +2,126 @@
   <div
     class="tw-h-full tw-flex tw-items-center tw-max-w-xs tw-w-full tw-bg-white tw-rounded-lg tw-shadow dark:tw-bg-gray-800 px-2 md:tw-px-3"
   >
-    <div v-if="!loading" class="tw-grid tw-grid-cols-2 tw-gap-x-1 tw-h-full">
-      <div class="tw-flex tw-flex-col tw-justify-evenly">
-        <h5
-          class="tw-leading-none tw-text-lg tw-font-bold tw-text-gray-900 dark:tw-text-white tw-pb-2"
-        >
-          {{ title }}
-        </h5>
-        <span
-          class="tw-text-3xl tw-font-bold tw-text-gray-900 dark:tw-text-white"
-          v-html="value"
-        />
-        <!-- v-html="formatValueWithK(value)" -->
+    <div v-if="!loading" class="tw-w-full tw-h-full tw-relative">
+      <div ref="fullChartRef" class="tw-w-full tw-h-full"></div>
 
-        <div
-          :class="[
-            rate > 0
-              ? 'tw-text-green-500 dark:tw-text-green-500'
-              : rate === 0
-                ? 'tw-text-blue-500 dark:tw-text-blue-500'
-                : 'tw-text-red-500 dark:tw-text-red-500',
-            'tw-flex tw-items-center tw-px-2.5 tw-py-0.5 tw-text-sm tw-font-semibold tw-text-center',
-          ]"
-        >
-          <i-tabler-arrow-up
-            v-if="rate !== 0"
-            :class="[rate >= 0 ? '' : 'tw-rotate-180', 'tw-w-5 tw-h-5 tw-ms-1']"
-          />
-          {{ rate }}%
-        </div>
-      </div>
-      <div class="tw-relative tw-flex tw-flex-col tw-justify-end">
-        <div
-          class="tw-absolute tw-top-0 tw-right-0 tw-flex tw-justify-end tw-items-center"
-        >
-          <Menu as="div" class="tw-relative tw-inline-block tw-text-left">
-            <div>
-              <MenuButton
-                class="tw-inline-flex tw-items-center tw-justify-center tw-text-gray-500 tw-w-8 tw-h-8 dark:tw-text-gray-400 hover:tw-bg-gray-100 dark:hover:tw-bg-gray-700 focus:tw-outline-none focus:tw-ring-4 focus:tw-ring-gray-200 dark:focus:tw-ring-gray-700 tw-rounded-lg tw-text-sm"
-              >
-                <svg
-                  class="tw-w-3.5 tw-h-3.5 tw-text-gray-800 dark:tw-text-white"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="currentColor"
-                  viewBox="0 0 16 3"
-                >
-                  <path
-                    d="M2 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm6.041 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM14 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Z"
-                  />
-                </svg>
-                <span class="tw-sr-only">Open dropdown</span>
-              </MenuButton>
-            </div>
-
-            <transition
-              enter-active-class="tw-transition tw-duration-100 tw-ease-out"
-              enter-from-class="tw-transform tw-scale-95 tw-opacity-0"
-              enter-to-class="tw-transform tw-scale-100 tw-opacity-100"
-              leave-active-class="tw-transition tw-duration-75 tw-ease-in"
-              leave-from-class="tw-transform tw-scale-100 tw-opacity-100"
-              leave-to-class="tw-transform tw-scale-95 tw-opacity-0"
+      <!-- Headless UI Menu Overlay -->
+      <div class="tw-absolute tw-top-0 tw-right-0 tw-z-40" ref="popoverRef">
+        <Popover class="tw-relative tw-inline-block tw-text-left">
+          <transition
+            enter-active-class="tw-transition tw-duration-100 tw-ease-out"
+            enter-from-class="tw-transform tw-scale-95 tw-opacity-0"
+            enter-to-class="tw-transform tw-scale-100 tw-opacity-100"
+            leave-active-class="tw-transition tw-duration-75 tw-ease-in"
+            leave-from-class="tw-transform tw-scale-100 tw-opacity-100"
+            leave-to-class="tw-transform tw-scale-95 tw-opacity-0"
+          >
+            <PopoverPanel
+              v-if="isMenuOpen"
+              static
+              class="tw-absolute tw-right-0 tw-mt-2 tw-z-40 tw-w-56 tw-bg-white tw-divide-y tw-divide-gray-100 tw-rounded-md tw-shadow-lg tw-ring-1 tw-ring-black/5 focus:tw-outline-none"
             >
-              <MenuItems
-                class="tw-z-30 tw-absolute tw-right-0 tw-w-56 tw-origin-top-right tw-divide-y tw-divide-gray-100 tw-rounded-md tw-bg-white tw-shadow-lg tw-ring-1 tw-ring-black/5 focus:tw-outline-none"
-              >
-                <div class="tw-px-1 tw-py-1">
-                  <MenuItem v-slot="{ active }">
-                    <button
-                      @click="selectItem('today')"
-                      :class="[
-                        active ? 'tw-bg-gray-100' : '',
-                        'tw-text-gray-700 tw-group tw-flex tw-w-full tw-items-center tw-rounded-md tw-px-2 tw-py-2 tw-text-sm',
-                      ]"
-                    >
-                      Today
-                    </button>
-                  </MenuItem>
-                  <MenuItem v-slot="{ active }">
-                    <button
-                      @click="selectItem('yesterday')"
-                      :class="[
-                        active ? 'tw-bg-gray-100' : '',
-                        'tw-text-gray-700 tw-group tw-flex tw-w-full tw-items-center tw-rounded-md tw-px-2 tw-py-2 tw-text-sm',
-                      ]"
-                    >
-                      Yesterday
-                    </button>
-                  </MenuItem>
-                  <MenuItem v-slot="{ active }">
-                    <button
-                      @click="selectItem('currentweek')"
-                      :class="[
-                        active ? 'tw-bg-gray-100' : '',
-                        'tw-text-gray-700 tw-group tw-flex tw-w-full tw-items-center tw-rounded-md tw-px-2 tw-py-2 tw-text-sm',
-                      ]"
-                    >
-                      This Week
-                    </button>
-                  </MenuItem>
-                </div>
-                <div class="tw-px-1 tw-py-1">
-                  <MenuItem v-slot="{ active }">
-                    <button
-                      @click="selectItem('lastweek')"
-                      :class="[
-                        active ? 'tw-bg-gray-100' : '',
-                        'tw-text-gray-700 tw-group tw-flex tw-w-full tw-items-center tw-rounded-md tw-px-2 tw-py-2 tw-text-sm',
-                      ]"
-                    >
-                      Last 7 days
-                    </button>
-                  </MenuItem>
-                  <MenuItem v-slot="{ active }">
-                    <button
-                      @click="selectItem('lastmonth')"
-                      :class="[
-                        active ? 'tw-bg-gray-100' : '',
-                        'tw-text-gray-700 tw-group tw-flex tw-w-full tw-items-center tw-rounded-md tw-px-2 tw-py-2 tw-text-sm',
-                      ]"
-                    >
-                      Last 30 days
-                    </button>
-                  </MenuItem>
-                </div>
-                <div class="tw-px-1 tw-py-1">
-                  <MenuItem v-slot="{ active }">
-                    <button
-                      @click="selectItem('last90days')"
-                      :class="[
-                        active ? 'tw-bg-gray-100' : '',
-                        'tw-text-gray-700 tw-group tw-flex tw-w-full tw-items-center tw-rounded-md tw-px-2 tw-py-2 tw-text-sm',
-                      ]"
-                    >
-                      Last 90 days
-                    </button>
-                  </MenuItem>
-                </div>
-              </MenuItems>
-            </transition>
-          </Menu>
-        </div>
-        <div ref="chartRef"></div>
+              <div class="tw-px-1 tw-py-1">
+                <button
+                  @click="selectItem('today')"
+                  class="tw-text-sm tw-w-full tw-text-left tw-py-2 tw-px-2 hover:tw-bg-gray-100"
+                >
+                  Today
+                </button>
+                <button
+                  @click="selectItem('yesterday')"
+                  class="tw-text-sm tw-w-full tw-text-left tw-py-2 tw-px-2 hover:tw-bg-gray-100"
+                >
+                  Yesterday
+                </button>
+                <button
+                  @click="selectItem('currentweek')"
+                  class="tw-text-sm tw-w-full tw-text-left tw-py-2 tw-px-2 hover:tw-bg-gray-100"
+                >
+                  This Week
+                </button>
+              </div>
+              <div class="tw-px-1 tw-py-1">
+                <button
+                  @click="selectItem('lastweek')"
+                  class="tw-text-sm tw-w-full tw-text-left tw-py-2 tw-px-2 hover:tw-bg-gray-100"
+                >
+                  Last 7 days
+                </button>
+                <button
+                  @click="selectItem('lastmonth')"
+                  class="tw-text-sm tw-w-full tw-text-left tw-py-2 tw-px-2 hover:tw-bg-gray-100"
+                >
+                  Last 30 days
+                </button>
+              </div>
+              <div class="tw-px-1 tw-py-1">
+                <button
+                  @click="selectItem('last90days')"
+                  class="tw-text-sm tw-w-full tw-text-left tw-py-2 tw-px-2 hover:tw-bg-gray-100"
+                >
+                  Last 90 days
+                </button>
+              </div>
+            </PopoverPanel>
+          </transition>
+        </Popover>
       </div>
     </div>
-    <div v-else class="tw-flex tw-w-full tw-flex-col tw-gap-2">
-      <div class="tw-skeleton tw-h-16 tw-w-full"></div>
-      <div class="tw-skeleton tw-h-3 tw-w-28"></div>
-      <div class="tw-skeleton tw-h-3 tw-w-full"></div>
+    <div v-else class="tw-w-full tw-h-full tw-relative">
+      <!-- Title Placeholder (Top Left) -->
+      <div class="tw-absolute tw-top-4 tw-left-4">
+        <div class="tw-skeleton tw-h-6 tw-w-24 tw-bg-gray-200"></div>
+      </div>
+
+      <!-- Value Placeholder (Top Left) -->
+      <div class="tw-absolute tw-top-16 tw-left-4">
+        <div class="tw-skeleton tw-h-10 tw-w-32 tw-bg-gray-200"></div>
+      </div>
+
+      <!-- Zoom Control Placeholder (Bottom) -->
+      <div class="tw-absolute tw-bottom-4 tw-left-4 tw-right-4">
+        <div
+          class="tw-skeleton tw-h-4 tw-w-full tw-bg-gray-200 tw-rounded"
+        ></div>
+      </div>
+
+      <!-- Filter Menu Button (Top Right) -->
+      <div class="tw-absolute tw-top-2 tw-right-2">
+        <div class="tw-skeleton tw-h-8 tw-w-8 tw-rounded tw-bg-gray-200"></div>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
-import ApexCharts from "apexcharts";
-import { computed, onMounted, ref, watch, watchEffect } from "vue";
+import * as echarts from "echarts";
+import {
+  onMounted,
+  ref,
+  watch,
+  computed,
+  nextTick,
+  onBeforeUnmount,
+} from "vue";
+import { formatValueWithK } from "~/utils/formatting";
+import { Popover, PopoverPanel } from "@headlessui/vue";
 
 const props = defineProps({
   currentHost: {
     type: String,
     required: true,
   },
+  globalFilter: {
+    type: String,
+    default: null,
+  },
 });
 
-const alertMessage = ref(`Enter license to unlock all features!`);
-const emit = defineEmits();
-
-function showAlert() {
-  emit("showAlert", { msg: alertMessage.value, type: "alert" });
-}
-
+const popoverRef = ref(null);
 const loading = ref(true);
+const isMenuOpen = ref(false);
+const menuButton = ref(null);
 const periodOptions = [
   { value: "currentweek", label: "Current Week" },
   { value: "today", label: "Today" },
@@ -190,156 +138,305 @@ const selectedLabel = computed(() => {
   );
 });
 
-const selectItem = async (item) => {
-  selectedItem.value = item;
-  await fetchData();
-};
-
 const title = ref("Members");
 const value = ref(0);
 const rate = ref(0);
-const data = ref([]);
-const categories = ref([]);
+const data = ref<number[]>([]);
+const categories = ref<string[]>([]);
+const fullChartRef = ref<HTMLElement | null>(null);
+let fullChart: echarts.ECharts | null = null;
 
-const chartRef = ref(null);
+const toggleMenu = () => {
+  isMenuOpen.value = !isMenuOpen.value;
 
-const getChartOptions = ref({
-  chart: {
-    height: "80%",
-    width: "100%",
-    type: "area",
-    fontFamily: "Inter, sans-serif",
-    dropShadow: {
-      enabled: false,
-    },
-    toolbar: {
-      show: false,
-    },
-  },
-  tooltip: {
-    fixed: {
-      enabled: true,
-      position: "topLeft",
-      offsetX: 0,
-      offsetY: -10,
-    },
-    enabled: true,
-    x: {
-      show: false,
-    },
-  },
-  fill: {
-    type: "gradient",
-    gradient: {
-      opacityFrom: 0.55,
-      opacityTo: 0,
-      shade: rate.value >= 0 ? "#1C64F2" : "#FBD5D5",
-      gradientToColors: rate.value >= 0 ? ["#1C64F2"] : ["#FBD5D5"],
-    },
-  },
-  dataLabels: {
-    enabled: false,
-  },
-  stroke: {
-    width: 6,
-  },
-  grid: {
-    show: false,
-    strokeDashArray: 4,
-    padding: {
-      left: 2,
-      right: 2,
-      top: 0,
-    },
-  },
-  series: [
-    {
-      name: "New users",
-      data: data.value,
-      color: rate.value >= 0 ? "#1A56DB" : "#E02424",
-    },
-  ],
-  xaxis: {
-    categories: categories.value,
-    labels: {
-      show: false,
-      style: {
-        fontFamily: "Inter, sans-serif",
-        cssClass: "text-xs font-normal fill-gray-500 dark:fill-gray-400",
-      },
-    },
-    axisBorder: {
-      show: false,
-    },
-    axisTicks: {
-      show: false,
-    },
-    title: {
-      text: selectedItem.value,
-      style: {
-        fontSize: "14px",
-        fontWeight: "bold",
-        color: "#e4e4e7",
-      },
-      rotate: -90,
-      // offsetX: -8,
-      offsetY: -10,
-    },
-  },
-  yaxis: {
-    show: false,
-  },
-});
-let chart = null;
+  if (isMenuOpen.value) {
+    setTimeout(() => {
+      document.addEventListener("click", handleClickOutside);
+    }, 0);
+  } else {
+    document.removeEventListener("click", handleClickOutside);
+  }
+};
 
-watchEffect(async () => {
-  getChartOptions.value.xaxis.title.text = selectedLabel.value;
-  getChartOptions.value.series[0].color =
-    rate.value >= 0 ? "#1C64F2" : "#E02424";
-  getChartOptions.value.fill.gradient.shade =
-    rate.value >= 0 ? "#1C64F2" : "#FBD5D5";
-  getChartOptions.value.fill.gradient.gradientToColors =
-    rate.value >= 0 ? ["#1C64F2"] : ["#FBD5D5"];
-});
+const handleClickOutside = (event) => {
+  if (popoverRef.value && !popoverRef.value.contains(event.target)) {
+    isMenuOpen.value = false;
+    document.removeEventListener("click", handleClickOutside);
+  }
+};
 
-watch(
-  () => selectedItem.value,
-  async (newValue) => {
-    await fetchData();
-  },
-);
-
-onMounted(async () => {
+const selectItem = async (item) => {
+  selectedItem.value = item;
+  isMenuOpen.value = false;
   await fetchData();
-  chart = new ApexCharts(chartRef.value, getChartOptions.value);
-  chart.render();
+};
+
+const getFullChartOptions = computed(() => {
+  const rateColor =
+    rate.value >= 0 ? (rate.value === 0 ? "#3b82f6" : "#10b981") : "#ef4444";
+
+  return {
+    grid: {
+      top: 20,
+      left: 80,
+      right: 15,
+      bottom: 30,
+      containLabel: false,
+    },
+    graphic: [
+      {
+        type: "text",
+        left: 5,
+        top: 15,
+        style: {
+          text: title.value,
+          font: "bold 18px Inter, sans-serif",
+          fill: "#111827",
+        },
+      },
+      {
+        type: "text",
+        left: 5,
+        top: 60,
+        style: {
+          text: formatValueWithK(value.value),
+          font: "bold 32px Inter, sans-serif",
+          fill: "#111827",
+        },
+      },
+      {
+        type: "group",
+        left: 15,
+        top: 110,
+        children: [
+          {
+            type: "text",
+            left: -10,
+            top: 0,
+            style: {
+              text: rate.value === 0 ? "" : rate.value > 0 ? "↑" : "↓",
+              font: "bold 20px Inter, sans-serif",
+              fill: rateColor,
+            },
+          },
+          {
+            type: "text",
+            top: 5,
+            style: {
+              text: `${rate.value}%`,
+              font: "bold 16px Inter, sans-serif",
+              fill: rateColor,
+            },
+          },
+        ],
+      },
+    ],
+    xAxis: {
+      type: "category",
+      data: categories.value,
+      axisLine: { show: false },
+      axisTick: { show: false },
+      axisLabel: { show: false },
+      name: selectedLabel.value,
+      nameLocation: "middle",
+      nameGap: 10,
+      nameTextStyle: {
+        color: "#e4e4e7",
+        fontSize: 14,
+        fontWeight: "bold",
+      },
+    },
+    yAxis: {
+      type: "value",
+      show: false,
+    },
+    series: [
+      {
+        data: data.value,
+        type: "line",
+        smooth: true,
+        symbol: "none",
+        lineStyle: {
+          width: 4,
+          color: rate.value >= 0 ? "#1A56DB" : "#E02424",
+        },
+        areaStyle: {
+          color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+            {
+              offset: 0,
+              color:
+                rate.value >= 0
+                  ? "rgba(28, 100, 242, 0.55)"
+                  : "rgba(251, 213, 213, 0.55)",
+            },
+            {
+              offset: 1,
+              color:
+                rate.value >= 0
+                  ? "rgba(28, 100, 242, 0)"
+                  : "rgba(251, 213, 213, 0)",
+            },
+          ]),
+        },
+      },
+    ],
+    tooltip: {
+      trigger: "axis",
+      position: [0, -10],
+      formatter: (params: any) => {
+        return `${params[0].axisValue}<br/>Members: ${params[0].data}`;
+      },
+    },
+    toolbox: {
+      show: true,
+      right: 0,
+      top: -2,
+      feature: {
+        myFilterMenu: {
+          show: true,
+          title: "Filters",
+          icon: "path://M4 10.5c-.83 0-1.5-.67-1.5-1.5S3.17 7.5 4 7.5 5.5 8.17 5.5 9 4.83 10.5 4 10.5zm0-6c-.83 0-1.5-.67-1.5-1.5S3.17 1.5 4 1.5 5.5 2.17 5.5 3 4.83 4.5 4 4.5zm0 12c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z",
+          onclick: () => toggleMenu(),
+        },
+        saveAsImage: {
+          title: "Save as PNG",
+          type: "png",
+          pixelRatio: 2,
+          excludeComponents: ["toolbox"],
+          name: `${title.value}_${selectedItem.value}`,
+        },
+        mySaveAsSVG: {
+          show: true,
+          title: "Save as SVG",
+          icon: "path://M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z",
+          onclick: () => exportChart("svg"),
+        },
+        myExportData: {
+          show: true,
+          title: "Export Data",
+          icon: "path://M17 17h2v2H5v-2h2v-2H5v-2h2v-2H5V9h2V7H5V5h12v12zm-4-6V9h-2v2h2zm0 2h-2v2h2v-2z",
+          onclick: () => exportData(),
+        },
+      },
+    },
+    // Draggable Zoom Configuration
+    dataZoom: [
+      {
+        type: "inside",
+        xAxisIndex: 0,
+        filterMode: "filter",
+        zoomLock: false,
+        moveOnMouseMove: true,
+        preventDefaultMouseMove: true,
+      },
+      {
+        type: "slider",
+        xAxisIndex: 0,
+        filterMode: "filter",
+        height: 15,
+        bottom: 10,
+        start: 0,
+        end: 100,
+        handleIcon:
+          "M10.7,11.9v-1.3H9.3v1.3c-4.9,0.3-8.8,4.4-8.8,9.4c0,5,3.9,9.1,8.8,9.4v1.3h1.3v-1.3c4.9-0.3,8.8-4.4,8.8-9.4C19.5,16.3,15.6,12.2,10.7,11.9z M13.3,24.4H6.7V23h6.6V24.4z M13.3,19.6H6.7v-1.4h6.6V19.6z",
+        handleSize: "80%",
+        handleStyle: {
+          color: "#fff",
+          shadowBlur: 3,
+          shadowColor: "rgba(0, 0, 0, 0.6)",
+          shadowOffsetX: 2,
+          shadowOffsetY: 2,
+        },
+      },
+    ],
+    animation: true,
+    animationDuration: 1000,
+    animationEasing: "cubicInOut",
+  };
 });
+
+const exportChart = (type: "png" | "svg") => {
+  if (!fullChart) return;
+  const url = fullChart.getDataURL({ type, pixelRatio: 2 });
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = `${title.value}-${selectedItem.value}.${type}`;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+};
+
+const exportData = () => {
+  const exportObj = {
+    title: title.value,
+    data: data.value,
+    categories: categories.value,
+    period: selectedItem.value,
+  };
+
+  const dataStr = `data:text/json;charset=utf-8,${encodeURIComponent(JSON.stringify(exportObj, null, 2))}`;
+  const link = document.createElement("a");
+  link.href = dataStr;
+  link.download = `${title.value}-data.json`;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+};
 
 const fetchData = async () => {
   try {
     const API_PREFIX = import.meta.env.PUBLIC_API_PREFIX;
-
     const response = await fetch(
       `${props.currentHost}${API_PREFIX}api/astroboard/gettotalusers?period=${selectedItem.value}`,
     );
     const result = await response.json();
 
-    // Update reactive data
     data.value = result.lastMembersCreated;
     categories.value = result.lastMembersCreatedDates;
     rate.value = result.rate;
     value.value = result.totalMembers;
 
-    getChartOptions.value.series[0].data = data.value;
-    getChartOptions.value.xaxis.categories = categories.value;
-
-    if (chart) {
-      chart.updateOptions(getChartOptions.value);
+    if (fullChart) {
+      fullChart.setOption(getFullChartOptions.value);
     }
-
     loading.value = false;
   } catch (error) {
     console.error("Error fetching data:", error);
   }
 };
+
+onMounted(async () => {
+  await fetchData();
+  await nextTick();
+
+  if (fullChartRef.value) {
+    fullChart = echarts.init(fullChartRef.value);
+    fullChart.setOption(getFullChartOptions.value);
+
+    const resizeObserver = new ResizeObserver(() => {
+      fullChart?.resize();
+    });
+    resizeObserver.observe(fullChartRef.value);
+
+    setTimeout(() => {
+      fullChart?.resize();
+    }, 100);
+  }
+});
+
+onBeforeUnmount(() => {
+  if (fullChart) {
+    fullChart.dispose();
+  }
+});
+
+watch(
+  () => props.globalFilter,
+  async (newFilter) => {
+    if (newFilter) {
+      selectedItem.value = newFilter;
+      await fetchData();
+    }
+  },
+);
 </script>

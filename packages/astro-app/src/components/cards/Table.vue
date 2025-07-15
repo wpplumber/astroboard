@@ -2,8 +2,36 @@
   <div
     class="tw-relative tw-col-span-3 tw-h-full tw-flex tw-items-center tw-w-full tw-bg-white tw-rounded-lg tw-shadow tw-px-1 tw-py-2"
   >
+    <!-- Empty State (shown when no members) -->
     <div
-      v-if="!loading"
+      v-if="!loading && (!table || table.getRowModel().rows.length === 0)"
+      class="tw-h-full tw-w-full tw-flex tw-flex-col tw-items-center tw-justify-center tw-p-4"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="tw-h-16 tw-w-16 tw-text-gray-400"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="1.5"
+          d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
+        />
+      </svg>
+      <h3 class="tw-text-lg tw-font-medium tw-text-gray-500 tw-mt-2">
+        No members found
+      </h3>
+      <p class="tw-text-sm tw-text-gray-400 tw-text-center tw-mt-1">
+        There are no members to display for this period.
+        <br />Try selecting a different time range.
+      </p>
+    </div>
+
+    <div
+      v-else-if="!loading"
       class="tw-w-full tw-flex tw-flex-col tw-justify-between tw-h-full tw-relative tw-overflow-hidden"
     >
       <table class="tw-w-full">
@@ -62,7 +90,7 @@
                       class="tw-relative tw-inline-flex tw-items-center tw-justify-center tw-w-10 tw-h-10 tw-overflow-hidden tw-bg-accent tw-rounded-full dark:tw-bg-gray-600"
                     >
                       <span
-                        class="tw-font-medium tw-text-gray-600 dark:tw-text-gray-300"
+                        class="tw-font-medium tw-text-gray-600 dark:tw-text-gray-200"
                         >{{
                           cell.getValue("name").split(" ").length > 1
                             ? cell.getValue("name").split(" ")[0].charAt(0) +
@@ -126,14 +154,14 @@
                   ? 'tw-cursor-pointer'
                   : 'tw-cursor-not-allowed'
               "
-              class="tw-flex tw-items-center tw-justify-center tw-px-3 tw-h-6 tw-ms-0 tw-leading-tight tw-text-gray-500 tw-bg-white tw-border tw-border-gray-300 hover:tw-bg-gray-100 hover:tw-text-gray-700 dark:tw-bg-gray-800 dark:tw-border-gray-700 dark:tw-text-gray-400 dark:hover:tw-bg-gray-700 dark:hover:tw-text-white"
+              class="tw-flex tw-items-center tw-justify-center tw-px-3 tw-h-6 tw-ms-0 tw-leading-tight tw-text-gray-500 tw-bg-white tw-border tw-border-gray-200 hover:tw-bg-gray-100 hover:tw-text-gray-700 dark:tw-bg-gray-800 dark:tw-border-gray-700 dark:tw-text-gray-400 dark:hover:tw-bg-gray-700 dark:hover:tw-text-white"
               >«</a
             >
           </li>
           <li>
             <a
               aria-current="page"
-              class="tw-flex tw-items-center tw-justify-center tw-px-3 tw-h-6 tw-border tw-border-gray-300 tw-bg-accent"
+              class="tw-flex tw-items-center tw-justify-center tw-px-3 tw-h-6 tw-border tw-border-gray-200 tw-bg-accent"
               >{{ table.getState().pagination.pageIndex + 1 }}</a
             >
           </li>
@@ -145,7 +173,7 @@
                   ? 'tw-cursor-pointer'
                   : 'tw-cursor-not-allowed'
               "
-              class="tw-flex tw-items-center tw-justify-center tw-px-3 tw-h-6 tw-leading-tight tw-text-gray-500 tw-bg-white tw-border tw-border-gray-300 hover:tw-bg-gray-100 hover:tw-text-gray-700 dark:tw-bg-gray-800 dark:tw-border-gray-700 dark:tw-text-gray-400 dark:hover:tw-bg-gray-700 dark:hover:tw-text-white"
+              class="tw-flex tw-items-center tw-justify-center tw-px-3 tw-h-6 tw-leading-tight tw-text-gray-500 tw-bg-white tw-border tw-border-gray-200 hover:tw-bg-gray-100 hover:tw-text-gray-700 dark:tw-bg-gray-800 dark:tw-border-gray-700 dark:tw-text-gray-400 dark:hover:tw-bg-gray-700 dark:hover:tw-text-white"
               >»</a
             >
           </li>
@@ -336,11 +364,100 @@
         </Menu>
       </div>
     </div>
-    <div v-else class="tw-flex tw-w-full tw-flex-col tw-gap-2">
-      <div class="tw-skeleton tw-h-16 tw-w-full"></div>
-      <div class="tw-skeleton tw-h-3 tw-w-28"></div>
-      <div class="tw-skeleton tw-h-3 tw-w-full"></div>
+    <div
+      v-else
+      class="tw-relative tw-col-span-3 tw-h-full tw-flex tw-items-center tw-w-full tw-bg-gray-200 tw-rounded-lg tw-shadow tw-px-1 tw-py-2"
+    >
+      <!-- Loading Skeleton -->
+      <div
+        class="tw-w-full tw-flex tw-flex-col tw-justify-between tw-h-full tw-relative"
+      >
+        <!-- Table Header Skeleton -->
+        <div
+          class="tw-w-full tw-bg-gray-200 tw-rounded-t-lg tw-h-8 tw-mb-1"
+        ></div>
+
+        <!-- Table Rows Skeleton -->
+        <div class="tw-flex tw-flex-col tw-gap-2 tw-mb-4">
+          <div
+            v-for="i in 4"
+            :key="i"
+            class="tw-flex tw-items-center tw-w-full tw-h-12 tw-bg-white tw-rounded"
+          >
+            <!-- Avatar Column -->
+            <div class="tw-flex tw-items-center tw-w-1/4 tw-px-3">
+              <div
+                class="tw-skeleton tw-h-8 tw-w-8 tw-rounded-full tw-bg-gray-200"
+              ></div>
+              <div class="tw-ml-3 tw-flex tw-flex-col tw-gap-1">
+                <div class="tw-skeleton tw-h-4 tw-w-24 tw-bg-gray-200"></div>
+                <div class="tw-skeleton tw-h-3 tw-w-16 tw-bg-gray-200"></div>
+              </div>
+            </div>
+
+            <!-- Email Column -->
+            <div class="tw-w-1/4 tw-px-3">
+              <div class="tw-skeleton tw-h-4 tw-w-32 tw-bg-gray-200"></div>
+            </div>
+
+            <!-- Group Column -->
+            <div class="tw-w-1/4 tw-px-3">
+              <div class="tw-skeleton tw-h-4 tw-w-20 tw-bg-gray-200"></div>
+            </div>
+
+            <!-- Status Column -->
+            <div class="tw-w-1/4 tw-px-3 tw-flex tw-items-center">
+              <div
+                class="tw-skeleton tw-h-3 tw-w-3 tw-rounded-full tw-bg-gray-200 tw-mr-2"
+              ></div>
+              <div class="tw-skeleton tw-h-4 tw-w-16 tw-bg-gray-200"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Pagination Skeleton -->
+        <div
+          class="tw-flex tw-justify-center tw-items-center tw-h-8 tw-relative"
+        >
+          <div class="tw-flex tw-gap-1">
+            <div
+              class="tw-skeleton tw-h-6 tw-w-6 tw-rounded tw-bg-gray-200"
+            ></div>
+            <div
+              class="tw-skeleton tw-h-6 tw-w-6 tw-rounded tw-bg-gray-200"
+            ></div>
+            <div
+              class="tw-skeleton tw-h-6 tw-w-6 tw-rounded tw-bg-gray-200"
+            ></div>
+          </div>
+          <div
+            class="tw-skeleton tw-h-4 tw-w-20 tw-bg-gray-200 tw-absolute tw-right-2"
+          ></div>
+        </div>
+
+        <!-- Bottom Right Menu Skeleton -->
+        <div class="tw-absolute tw-bottom-1 tw-left-1">
+          <div
+            class="tw-skeleton tw-h-8 tw-w-8 tw-rounded tw-bg-gray-200"
+          ></div>
+        </div>
+
+        <!-- Top Right Menu Skeleton -->
+        <div class="tw-absolute tw-top-1 tw-right-1">
+          <div
+            class="tw-skeleton tw-h-8 tw-w-8 tw-rounded tw-bg-gray-200"
+          ></div>
+        </div>
+
+        <!-- Period Label Skeleton -->
+        <div class="tw-absolute tw-bottom-2 tw-right-10">
+          <div
+            class="tw-skeleton tw-h-4 tw-w-24 tw-bg-gray-200 tw-rounded"
+          ></div>
+        </div>
+      </div>
     </div>
+
     <div
       class="tw-absolute tw-bottom-2 tw-right-40 tw-text-[#e4e4e7] tw-font-bold tw-text-sm"
     >
@@ -358,7 +475,7 @@ import {
   getPaginationRowModel,
   useVueTable,
 } from "@tanstack/vue-table";
-import { computed, onMounted, ref } from "vue";
+import { computed, onMounted, ref, watch } from "vue";
 import ExcelJS from "exceljs";
 import { saveAs } from "file-saver";
 import type { MembersList } from "~/utils/interfaces.ts";
@@ -367,6 +484,10 @@ const props = defineProps({
   currentHost: {
     type: String,
     required: true,
+  },
+  globalFilter: {
+    type: String,
+    default: null,
   },
 });
 
@@ -473,6 +594,7 @@ onMounted(async () => {
 });
 
 const fetchData = async () => {
+  loading.value = true; // show skeleton
   try {
     const API_PREFIX = import.meta.env.PUBLIC_API_PREFIX;
 
@@ -494,9 +616,10 @@ const fetchData = async () => {
         },
       },
     });
-    loading.value = false;
   } catch (error) {
     console.error("Error fetching data:", error);
+  } finally {
+    loading.value = false; // hide skeleton
   }
 };
 
@@ -572,4 +695,14 @@ const exportToCSV = () => {
     alert("Failed to export to CSV. Please try again.");
   }
 };
+
+watch(
+  () => props.globalFilter,
+  async (newFilter) => {
+    if (newFilter) {
+      selectedItem.value = newFilter;
+      await fetchData();
+    }
+  },
+);
 </script>

@@ -8,9 +8,10 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    1: typeof import('./src/components/cards/Pages copy 1.vue')['default']
     Alert: typeof import('./src/components/Alert.vue')['default']
     BarChart: typeof import('./src/components/cards/BarChart.vue')['default']
-    copy: typeof import('./src/components/cards/Table copy.vue')['default']
+    copy: typeof import('./src/components/cards/LineChart copy.vue')['default']
     CreateIssue: typeof import('./src/components/CreateIssue.vue')['default']
     DADVueNext: typeof import('./src/components/DADVueNext.vue')['default']
     Dashboard: typeof import('./src/components/Dashboard.vue')['default']
@@ -18,6 +19,7 @@ declare module 'vue' {
     Drawer: typeof import('./src/components/Drawer.vue')['default']
     FloatingActionButtons: typeof import('./src/components/FloatingActionButtons.vue')['default']
     Footer: typeof import('./src/components/Footer.vue')['default']
+    GlobalFiltering: typeof import('./src/components/GlobalFiltering.vue')['default']
     Groups: typeof import('./src/components/cards/Groups.vue')['default']
     GroupsCard: typeof import('./src/components/GroupsCard.vue')['default']
     Header: typeof import('./src/components/Header.vue')['default']
@@ -37,6 +39,8 @@ declare module 'vue' {
     Membership: typeof import('./src/components/cards/Membership.vue')['default']
     Pages: typeof import('./src/components/cards/Pages.vue')['default']
     PagesBackup: typeof import('./src/components/cards/Pages-backup.vue')['default']
+    Pagesec: typeof import('./src/components/cards/Pagesec.vue')['default']
+    Pagesx: typeof import('./src/components/cards/Pagesx.vue')['default']
     Table: typeof import('./src/components/cards/Table.vue')['default']
     TotalGroups: typeof import('./src/components/cards/TotalGroups.vue')['default']
     TotalMedias: typeof import('./src/components/cards/TotalMedias.vue')['default']

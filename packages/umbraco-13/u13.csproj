@@ -6,9 +6,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="astroboard" Version="1.1.2" />
     <PackageReference Include="clean" Version="4.1.0" />
-    <PackageReference Include="Umbraco.Cms" Version="13.8.1" />
+    <PackageReference Include="Umbraco.Cms" Version="13.5.0" />
   </ItemGroup>
 
   <ItemGroup>

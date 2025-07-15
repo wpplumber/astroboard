@@ -13,15 +13,14 @@ import CreateIssue from "./CreateIssue.vue";
 const showDrawer = ref(false);
 
 const props = defineProps<{
-  computerName: string;
   licensed: boolean;
 }>();
 </script>
 
 <template>
-  <footer class="tw-mt-auto">
+  <footer class="tw-relative">
     <div
-      class="tw-w-full tw-mx-auto tw-max-w-screen-xl tw-p-2 md:tw-flex md:tw-items-center md:tw-justify-center"
+      class="tw-mt-2 tw-w-full tw-mx-auto tw-max-w-screen-xl tw-p-2 md:tw-flex md:tw-items-center md:tw-justify-center"
     >
       <ul
         class="tw-flex tw-flex-wrap tw-items-center tw-gap-x-2 tw-text-xs tw-font-medium tw-text-gray-500 dark:tw-text-gray-400 sm:tw-mt-0"

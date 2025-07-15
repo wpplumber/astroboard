@@ -3,39 +3,73 @@
     v-if="!shutdownApp"
     class="!tw-grid tw-h-full !tw-grid-cols-4 !tw-gap-3 tw-px-3 tw-py-1"
   >
+    <Filtering @filterSelected="handleGlobalFilter" />
     <div
       class="!tw-col-span-4 !tw-grid !tw-h-[20vh] !tw-grid-cols-4 !tw-gap-x-3"
     >
       <div>
-        <Pages @showAlert="openAlert" :currentHost="currentHost" />
+        <Pages
+          @showAlert="openAlert"
+          :currentHost="currentHost"
+          :globalFilter="currentGlobalFilter"
+        />
       </div>
       <div>
-        <Medias @showAlert="openAlert" :currentHost="currentHost" />
+        <Medias
+          @showAlert="openAlert"
+          :currentHost="currentHost"
+          :globalFilter="currentGlobalFilter"
+        />
       </div>
       <div>
-        <Members @showAlert="openAlert" :currentHost="currentHost" />
+        <Members
+          @showAlert="openAlert"
+          :currentHost="currentHost"
+          :globalFilter="currentGlobalFilter"
+        />
       </div>
       <div>
-        <Groups @showAlert="openAlert" :currentHost="currentHost" />
+        <Groups
+          @showAlert="openAlert"
+          :currentHost="currentHost"
+          :globalFilter="currentGlobalFilter"
+        />
       </div>
     </div>
     <div class="!tw-col-span-4 !tw-grid tw-h-[23vh] !tw-grid-cols-3 tw-gap-x-3">
-      <UserActivity @showAlert="openAlert" :currentHost="currentHost" />
-      <DonutChart @showAlert="openAlert" :currentHost="currentHost" />
-      <BarChart @showAlert="openAlert" :currentHost="currentHost" />
+      <UserActivity
+        @showAlert="openAlert"
+        :currentHost="currentHost"
+        :globalFilter="currentGlobalFilter"
+      />
+      <DonutChart
+        @showAlert="openAlert"
+        :currentHost="currentHost"
+        :globalFilter="currentGlobalFilter"
+      />
+      <BarChart
+        @showAlert="openAlert"
+        :currentHost="currentHost"
+        :globalFilter="currentGlobalFilter"
+      />
     </div>
-    <div
-      class="!tw-col-span-4 !tw-grid tw-h-[43vh] !tw-grid-cols-5 !tw-gap-x-3"
-    >
-      <LineChart @showAlert="openAlert" :currentHost="currentHost" />
-      <Table @showAlert="openAlert" :currentHost="currentHost" />
+    <div class="!tw-col-span-4 !tw-grid !tw-grid-cols-5 !tw-gap-x-3">
+      <LineChart
+        @showAlert="openAlert"
+        :currentHost="currentHost"
+        :globalFilter="currentGlobalFilter"
+      />
+      <Table
+        @showAlert="openAlert"
+        :currentHost="currentHost"
+        :globalFilter="currentGlobalFilter"
+      />
     </div>
   </main>
   <Footer
     @showAlert="openAlert"
     :licensed="licensed"
     @licenseActivated="openPremiumFeatures"
-    :computerName="computerName"
   />
   <FloatingActionButtons />
   <Alert
@@ -59,6 +93,7 @@ import LineChart from "./cards/LineChart.vue";
 import Table from "./cards/Table.vue";
 import FloatingActionButtons from "~/components/FloatingActionButtons.vue";
 import Footer from "../components/Footer.vue";
+import Filtering from "../components/GlobalFiltering.vue";
 
 const alertMessage = ref("Oops!");
 const alertType = ref("alert");
@@ -66,6 +101,11 @@ const shutdownApp = ref(false);
 const isAlertVisible = ref(false);
 const lockPremiumFeatures = ref(false);
 const licensed = ref(false);
+const currentGlobalFilter = ref(null);
+
+const handleGlobalFilter = (filter) => {
+  currentGlobalFilter.value = filter;
+};
 
 const handleAlertClose = () => {
   isAlertVisible.value = false;
